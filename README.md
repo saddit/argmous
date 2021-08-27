@@ -4,7 +4,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 ## Quick Start
 
-1. add dependence to your `POM.XML` 
+1. add dependences to your `POM.XML` 
 
    ```xml
    <dependency>
@@ -31,7 +31,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    in this case, we limit length of **s** greater or equal than **1** and less than **3** and limit value of **i** greater or equal than **0** and less than **5** （you can customize the rules of validation)
 
    ```java
-   @SpringBootApplication(scanBasePackages = "cn.shijh.argmous")
+   @SpringBootApplication
    @RestController
    @RequestMapping("/")
    public class TestApplication {
