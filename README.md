@@ -7,23 +7,25 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 1. add dependences to your `POM.XML` 
 
    ```xml
-   <dependency>
-       <groupId>cn.shijh</groupId>
-       <artifactId>argmous</artifactId>
-   </dependency>
-   <dependency>
-       <groupId>org.springframework.boot</groupId>
-       <artifactId>spring-boot-starter-web</artifactId>
-   </dependency>
-   <dependency>
-       <groupId>org.projectlombok</groupId>
-       <artifactId>lombok</artifactId>
-       <optional>true</optional>
-   </dependency>
-   <dependency>
-       <groupId>org.springframework.boot</groupId>
-       <artifactId>spring-boot-starter-aop</artifactId>
-   </dependency>
+   <dependencies>
+       <dependency>
+           <groupId>cn.shijh</groupId>
+           <artifactId>argmous</artifactId>
+       </dependency>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-web</artifactId>
+       </dependency>
+       <dependency>
+           <groupId>org.projectlombok</groupId>
+           <artifactId>lombok</artifactId>
+           <optional>true</optional>
+       </dependency>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-aop</artifactId>
+       </dependency>
+   </dependencies>
    ```
 
 2. write a controller and handler  `ParamCheckException`
@@ -71,4 +73,62 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    
 
 ## Advanced
+
+### Annotation
+
+| Name            | args                                                         | Note                                                         |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ParamCheck      | include, exclude, size, range, split2array ,split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
+| ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
+| ArrayParamCheck | target, values                                               | If you want to check every element in an(a) array(list), use this to make `ParamCheck` effect all element |
+
+> :information_source: `include` did better than `exclude` and not recommand use `ArrayParamCheck` to a large array
+
+### Default Validators
+
+we provide lots of validators
+
+| Name                | Note                                                         |
+| :------------------ | :----------------------------------------------------------- |
+| RequiredValidator   | make sure arg is not `null` or `""`  (if arg is a string)  if `ParamCheck-required` is true |
+| SizeValidatator     | check arg with `ParamCheck-size` when size is not empty and arg is array or string. |
+| ValueRangeValidator | check arg value with `ParamCheck-ragne`  when range is not empty and arg is number. |
+| RegexpValidator     | make sure arg matches the `ParamCheck-regexp` when regexp is not empty and arg is string |
+
+> 1. size {n} and {n, -1} means [n, +∞)
+> 2. range {"n"} and {"n", ""} means [n, +∞)
+
+### Expand validator
+
+if you have a special rule,  just implement `RuleValidator` and make it as a componet of spring and remember use `ParamCheck-custom`.
+
+```java
+public interface RuleValidator {
+    /**
+     * validate argument
+     * @param object argument
+     * @param rule rule
+     * @return true if passed
+     * @throws IllegalStateException if something got wrong
+     */
+    boolean validate(Object object, ParamCheck rule) throws IllegalStateException;
+
+    /**
+     * return the notify message of an no passed validating
+     * @param rule rule
+     * @return notify message
+     */
+    String errorMessage(ParamCheck rule);
+
+    /**
+     * does support to be checked ?
+     * @param paramType argument's type
+     * @param rule rule
+     * @return true if supported
+     */
+    boolean support(Class<?> paramType, ParamCheck rule);
+}
+```
+
+> we provide `CustomUtils` to help slove custom args
 

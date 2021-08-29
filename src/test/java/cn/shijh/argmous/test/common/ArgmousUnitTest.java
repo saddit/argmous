@@ -1,6 +1,9 @@
-package cn.shijh.argmous.test;
+package cn.shijh.argmous.test.common;
 
 import cn.shijh.argmous.exception.ParamCheckException;
+import cn.shijh.argmous.test.TestApplication;
+import cn.shijh.argmous.test.TestComponent;
+import cn.shijh.argmous.test.TestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

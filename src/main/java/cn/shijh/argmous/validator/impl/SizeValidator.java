@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class LengthValidator implements RuleValidator {
+public class SizeValidator implements RuleValidator {
     @Override
     public boolean support(Class<?> paramType, ParamCheck rule) {
         return rule.range().length > 0
@@ -44,22 +44,6 @@ public class LengthValidator implements RuleValidator {
         if (range.length > 1 && range[1] != -1) {
             length = length && lengthCheck(anno, param, range[0], 1);
         }
-        //region @Deprecated
-        if (anno.lengthEQ() != -1) {
-            length = lengthCheck(anno, param, anno.lengthEQ(), 0);
-        } else {
-            if (anno.lengthLE() != -1) {
-                length = lengthCheck(anno, param, anno.lengthLE(), 0, 1);
-            } else if (anno.lengthLT() != -1) {
-                length = lengthCheck(anno, param, anno.lengthLT(), 1);
-            }
-            if (anno.lengthGT() != -1) {
-                length = length && lengthCheck(anno, param, anno.lengthGT(), -1);
-            } else if (anno.lengthGE() != -1) {
-                length = length && lengthCheck(anno, param, anno.lengthGE(), -1, 0);
-            }
-        }
-        //endregion
         return length;
     }
 

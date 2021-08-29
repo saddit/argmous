@@ -39,4 +39,9 @@ public class TestComponent {
     public void arrayTest(List<TestData> dataList) {
         System.out.println("pass");
     }
+
+    @ParamCheck(include = "s", custom = { "customKey=true", "customValue=false" })
+    public void testCustom(String s) {
+        System.out.println("pass");
+    }
 }
