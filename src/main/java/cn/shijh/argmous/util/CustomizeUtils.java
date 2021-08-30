@@ -5,7 +5,7 @@ import org.springframework.web.servlet.tags.Param;
 
 import java.util.*;
 
-public class CustomUtils {
+public class CustomizeUtils {
 
     /**
      * check present

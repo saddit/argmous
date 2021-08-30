@@ -82,7 +82,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 | ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
 | ArrayParamCheck | target, values                                               | If you want to check every element in an(a) array(list), use this to make `ParamCheck` effect all element |
 
-> :information_source: `include` did better than `exclude` and not recommand use `ArrayParamCheck` to a large array
+> :information_source: not recommend use `ArrayParamCheck` to a large array
 
 ### Default Validators
 
@@ -100,7 +100,7 @@ we provide lots of validators
 
 ### Expand validator
 
-if you have a special rule,  just implement `RuleValidator` and make it as a componet of spring and remember use `ParamCheck-custom`.
+if you have a special rule,  just implement `RuleValidator` and make it as a component of spring and remember use `ParamCheck-custom`.
 
 ```java
 public interface RuleValidator {
@@ -130,5 +130,5 @@ public interface RuleValidator {
 }
 ```
 
-> we provide `CustomUtils` to help slove custom args
+> we provide `CustomizeUtils` to help slove custom args
 

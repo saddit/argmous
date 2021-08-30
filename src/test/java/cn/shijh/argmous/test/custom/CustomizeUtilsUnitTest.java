@@ -3,13 +3,12 @@ package cn.shijh.argmous.test.custom;
 import cn.shijh.argmous.exception.ParamCheckException;
 import cn.shijh.argmous.test.TestApplication;
 import cn.shijh.argmous.test.TestComponent;
-import cn.shijh.argmous.util.CustomUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = TestApplication.class)
-public class CustomUtilsUnitTest {
+public class CustomizeUtilsUnitTest {
     @Autowired
     private TestComponent testComponent;
 
