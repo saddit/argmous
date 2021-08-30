@@ -130,5 +130,5 @@ public interface RuleValidator {
 }
 ```
 
-> we provide `CustomUtils` to help slove custom args
+> we provide `CustomUtils` to help solving custom args
 
