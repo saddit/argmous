@@ -2,6 +2,8 @@
 
 Argmous is a light and easy framework to validate arguments on any method because it dependences on spring-aop and just use annotaion to define validation rules.
 
+[Go to argmous-spring-boot-starter project](https://github.com/838239178/argmous-spring-boot-starter)
+
 ## Quick Start
 
 1. add dependences to your `POM.XML` 
@@ -10,24 +12,12 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    <dependencies>
        <dependency>
            <groupId>cn.shijh</groupId>
-           <artifactId>argmous</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-web</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.projectlombok</groupId>
-           <artifactId>lombok</artifactId>
-           <optional>true</optional>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-aop</artifactId>
+           <artifactId>argmous-spring-boot-starter</artifactId>
+           <version>1.0.0-BETA</version>
        </dependency>
    </dependencies>
    ```
-
+   
 2. write a controller and handler  `ParamCheckException`
 
    in this case, we limit length of **s** greater or equal than **1** and less than **3** and limit value of **i** greater or equal than **0** and less than **5** （you can customize the rules of validation)
@@ -82,7 +72,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 | ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
 | ArrayParamCheck | target, values                                               | If you want to check every element in an(a) array(list), use this to make `ParamCheck` effect all element |
 
-> :information_source: `include` did better than `exclude` and not recommand use `ArrayParamCheck` to a large array
+> :information_source: not recommend use `ArrayParamCheck` to a large array
 
 ### Default Validators
 
@@ -100,7 +90,7 @@ we provide lots of validators
 
 ### Expand validator
 
-if you have a special rule,  just implement `RuleValidator` and make it as a componet of spring and remember use `ParamCheck-custom`.
+if you have a special rule,  just implement `RuleValidator` and make it as a component of spring and remember use `ParamCheck-custom`.
 
 ```java
 public interface RuleValidator {
@@ -111,14 +101,14 @@ public interface RuleValidator {
      * @return true if passed
      * @throws IllegalStateException if something got wrong
      */
-    boolean validate(Object object, ParamCheck rule) throws IllegalStateException;
+    boolean validate(Object object, ValidationRule rule) throws IllegalStateException;
 
     /**
      * return the notify message of an no passed validating
      * @param rule rule
      * @return notify message
      */
-    String errorMessage(ParamCheck rule);
+    String errorMessage(ValidationRule rule);
 
     /**
      * does support to be checked ?
@@ -126,9 +116,9 @@ public interface RuleValidator {
      * @param rule rule
      * @return true if supported
      */
-    boolean support(Class<?> paramType, ParamCheck rule);
+    boolean support(Class<?> paramType, ValidationRule rule);
 }
 ```
 
-> we provide `CustomUtils` to help solving custom args
+> we provide `CustomizeUtils` to help slove custom args
 

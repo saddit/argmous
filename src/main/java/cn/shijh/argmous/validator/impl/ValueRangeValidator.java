@@ -1,32 +1,31 @@
 package cn.shijh.argmous.validator.impl;
 
 
-import cn.shijh.argmous.context.ParamCheck;
+import cn.shijh.argmous.model.ValidationRule;
 import cn.shijh.argmous.validator.RuleValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+
 public class ValueRangeValidator implements RuleValidator {
 
     @Override
-    public boolean support(Class<?> paramType, ParamCheck rule) {
-        return Number.class.isAssignableFrom(paramType) && rule.range().length > 0;
+    public boolean support(Class<?> paramType, ValidationRule rule) {
+        return Number.class.isAssignableFrom(paramType) && rule.getRange().size() > 0;
     }
 
     @Override
-    public String errorMessage(ParamCheck rule) {
-        return "number should be included in [" + StringUtils.join(rule.range(),",") + ")";
+    public String errorMessage(ValidationRule rule) {
+        return "number should be included in [" + StringUtils.join(rule.getRange(),",") + ")";
     }
 
     @Override
-    public boolean validate(Object object, ParamCheck anno) throws IllegalStateException {
+    public boolean validate(Object object, ValidationRule rule) throws IllegalStateException {
         numberCheck(object);
-        String[] range = anno.range();
+        String[] range = rule.getRange().toArray(new String[0]);
         boolean isInt = object instanceof Integer;
         boolean valid = true;
         if (range.length > 0 && !range[0].isEmpty()) {

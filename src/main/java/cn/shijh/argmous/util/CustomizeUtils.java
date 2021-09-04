@@ -1,11 +1,10 @@
 package cn.shijh.argmous.util;
 
-import cn.shijh.argmous.context.ParamCheck;
-import org.springframework.web.servlet.tags.Param;
+import cn.shijh.argmous.model.ValidationRule;
 
 import java.util.*;
 
-public class CustomUtils {
+public class CustomizeUtils {
 
     /**
      * check present
@@ -13,7 +12,7 @@ public class CustomUtils {
      * @param pattern regexp
      * @return true if present
      */
-    public static boolean isContained(ParamCheck rule, String pattern) {
+    public static boolean isContained(ValidationRule rule, String pattern) {
         return findOptional(rule,pattern).isPresent();
     }
 
@@ -23,7 +22,7 @@ public class CustomUtils {
      * @param key the key like 'a'
      * @return true if present
      */
-    public static boolean hasKeyValue(ParamCheck rule, String key) {
+    public static boolean hasKeyValue(ValidationRule rule, String key) {
         return findOptional(rule,"^" + key + "=.+$").isPresent();
     }
 
@@ -33,8 +32,8 @@ public class CustomUtils {
      * @param pattern regexp
      * @return an optional string
      */
-    public static Optional<String> findOptional(ParamCheck rule, String pattern) {
-        return Arrays.stream(rule.custom())
+    public static Optional<String> findOptional(ValidationRule rule, String pattern) {
+        return rule.getCustom().stream()
                 .filter(s -> s.matches(pattern))
                 .findFirst();
     }
@@ -45,7 +44,7 @@ public class CustomUtils {
      * @param pattern regexp
      * @return null if not found else the element
      */
-    public static String find(ParamCheck rule, String pattern) {
+    public static String find(ValidationRule rule, String pattern) {
         Optional<String> res = findOptional(rule, pattern);
         return res.orElse(null);
     }
@@ -56,7 +55,7 @@ public class CustomUtils {
      * @param key like 'a'
      * @return collection of values
      */
-    public static Collection<String> getValues(ParamCheck rule, String key) {
+    public static Collection<String> getValues(ValidationRule rule, String key) {
         final Collection<String> values = new ArrayList<>(2);
         findOptional(rule, "^" + key + "=.+$").ifPresent(s -> {
             String value = s.split("=")[1];
@@ -71,7 +70,7 @@ public class CustomUtils {
      * @param key like 'a'
      * @return null if not found or none value else value like 'b'
      */
-    public static String getValue(ParamCheck rule, String key) {
+    public static String getValue(ValidationRule rule, String key) {
         final String[] value = new String[1];
         value[0] = null;
         findOptional(rule, "^" + key + "=.+$").ifPresent(
