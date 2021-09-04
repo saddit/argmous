@@ -3,7 +3,6 @@ package cn.shijh.argmous.validator.impl;
 
 
 import cn.shijh.argmous.model.ValidationRule;
-import cn.shijh.argmous.spring.context.ParamCheck;
 import cn.shijh.argmous.validator.RuleValidator;
 import org.apache.commons.lang3.StringUtils;
 

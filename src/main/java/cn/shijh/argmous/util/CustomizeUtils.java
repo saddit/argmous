@@ -1,7 +1,6 @@
 package cn.shijh.argmous.util;
 
 import cn.shijh.argmous.model.ValidationRule;
-import cn.shijh.argmous.spring.context.ParamCheck;
 
 import java.util.*;
 

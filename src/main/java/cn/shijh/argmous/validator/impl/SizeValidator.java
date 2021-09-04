@@ -2,9 +2,7 @@ package cn.shijh.argmous.validator.impl;
 
 
 import cn.shijh.argmous.model.ValidationRule;
-import cn.shijh.argmous.spring.context.ParamCheck;
 import cn.shijh.argmous.validator.RuleValidator;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;

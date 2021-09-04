@@ -2,11 +2,9 @@ package cn.shijh.argmous.validator.impl;
 
 
 import cn.shijh.argmous.model.ValidationRule;
-import cn.shijh.argmous.spring.context.ParamCheck;
 import cn.shijh.argmous.validator.RuleValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
