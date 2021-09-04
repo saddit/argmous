@@ -1,4 +1,4 @@
-package cn.shijh.argmous.validator;
+package cn.shijh.argmous.manager.validator;
 
 import cn.shijh.argmous.model.ArgumentInfo;
 import cn.shijh.argmous.model.ValidationRule;

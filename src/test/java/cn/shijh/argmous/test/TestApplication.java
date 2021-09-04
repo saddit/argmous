@@ -1,11 +1,11 @@
 package cn.shijh.argmous.test;
 
-import cn.shijh.argmous.context.ParamCheck;
-import cn.shijh.argmous.context.ParamChecks;
+import cn.shijh.argmous.spring.context.ParamCheck;
+import cn.shijh.argmous.spring.context.ParamChecks;
 import cn.shijh.argmous.exception.ParamCheckException;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication(scanBasePackages = "cn.shijh.argmous")

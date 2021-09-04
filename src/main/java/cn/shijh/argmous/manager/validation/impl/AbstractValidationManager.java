@@ -1,13 +1,12 @@
-package cn.shijh.argmous.manager.impl;
+package cn.shijh.argmous.manager.validation.impl;
 
-import cn.shijh.argmous.context.ParamCheck;
 import cn.shijh.argmous.exception.ParamCheckException;
-import cn.shijh.argmous.manager.ArrayValidationManager;
-import cn.shijh.argmous.manager.ValidationManager;
+import cn.shijh.argmous.manager.validation.ArrayValidationManager;
+import cn.shijh.argmous.manager.validation.ValidationManager;
 import cn.shijh.argmous.model.ArgumentInfo;
 import cn.shijh.argmous.model.ValidationRule;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

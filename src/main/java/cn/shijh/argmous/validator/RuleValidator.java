@@ -1,7 +1,7 @@
 package cn.shijh.argmous.validator;
 
 
-import cn.shijh.argmous.context.ParamCheck;
+import cn.shijh.argmous.model.ValidationRule;
 
 public interface RuleValidator {
     /**
@@ -11,14 +11,14 @@ public interface RuleValidator {
      * @return true if passed
      * @throws IllegalStateException if something got wrong
      */
-    boolean validate(Object object, ParamCheck rule) throws IllegalStateException;
+    boolean validate(Object object, ValidationRule rule) throws IllegalStateException;
 
     /**
      * return the notify message of an no passed validating
      * @param rule rule
      * @return notify message
      */
-    String errorMessage(ParamCheck rule);
+    String errorMessage(ValidationRule rule);
 
     /**
      * does support to be checked ?
@@ -26,5 +26,5 @@ public interface RuleValidator {
      * @param rule rule
      * @return true if supported
      */
-    boolean support(Class<?> paramType, ParamCheck rule);
+    boolean support(Class<?> paramType, ValidationRule rule);
 }

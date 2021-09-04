@@ -1,57 +1,49 @@
-package cn.shijh.argmous.context;
+package cn.shijh.argmous.spring.context;
 
 import cn.shijh.argmous.exception.ParamCheckException;
-import cn.shijh.argmous.manager.ArrayValidationManager;
-import cn.shijh.argmous.manager.ValidationManager;
+import cn.shijh.argmous.manager.validation.ArrayValidationManager;
+import cn.shijh.argmous.manager.validation.ValidationManager;
 import cn.shijh.argmous.model.ArgumentInfo;
 import cn.shijh.argmous.model.ValidationRule;
 import cn.shijh.argmous.util.AnnotationBeanUtils;
 import cn.shijh.argmous.util.ArgumentUtils;
-import cn.shijh.argmous.validator.RuleValidator;
+import lombok.Setter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.core.annotation.Order;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
-
+import org.springframework.core.Ordered;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Aspect
-@Component
-@Order(2)
-public class ParamCheckAdvice {
-    @Autowired
+@Setter
+public class ParamCheckAdvice implements Ordered, InitializingBean {
+
+    private int order = 1;
+
     private ApplicationContext applicationContext;
 
-    @Autowired
     private ValidationManager validationManager;
 
-    @Autowired
     private ArrayValidationManager arrayValidationManager;
 
-    @Pointcut("@annotation(cn.shijh.argmous.context.ParamCheck)")
+    @Pointcut("@annotation(cn.shijh.argmous.spring.context.ParamCheck)")
     public void pointCut() {
     }
 
-    @Pointcut("@annotation(cn.shijh.argmous.context.ParamChecks)")
+    @Pointcut("@annotation(cn.shijh.argmous.spring.context.ParamChecks)")
     public void multiParamCheck() {
     }
 
-    @Pointcut("@annotation(cn.shijh.argmous.context.ArrayParamCheck)")
+    @Pointcut("@annotation(cn.shijh.argmous.spring.context.ArrayParamCheck)")
     public void arrayParamChecks() {
     }
 
@@ -117,4 +109,21 @@ public class ParamCheckAdvice {
         arrayValidationManager.validate(args, rules, annotation.target());
     }
 
+    @Override
+    public int getOrder() {
+        return this.order;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws IllegalStateException {
+        if (validationManager == null) {
+            throw new IllegalStateException("required validation manager");
+        }
+        if (arrayValidationManager == null) {
+            throw new IllegalStateException("required array validation manager");
+        }
+        if (applicationContext == null) {
+            throw new IllegalStateException("required application context");
+        }
+    }
 }

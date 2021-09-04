@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration = cn.shijh.argmous.spring.starter.ValidationAutoConfiguration, cn.shijh.argmous.spring.starter.ArgmousAutoConfiguration

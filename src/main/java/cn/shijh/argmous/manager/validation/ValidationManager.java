@@ -1,4 +1,4 @@
-package cn.shijh.argmous.manager;
+package cn.shijh.argmous.manager.validation;
 
 import cn.shijh.argmous.exception.ParamCheckException;
 import cn.shijh.argmous.model.ArgumentInfo;

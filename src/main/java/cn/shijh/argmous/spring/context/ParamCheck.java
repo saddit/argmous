@@ -1,4 +1,4 @@
-package cn.shijh.argmous.context;
+package cn.shijh.argmous.spring.context;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

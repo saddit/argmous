@@ -22,10 +22,11 @@ public class ReflectionTest {
     void reflect2() throws Exception {
         ValidationRule rule = new ValidationRule();
         Field include = rule.getClass().getDeclaredField("include");
-        String[] s = new String[] {"1","2","3"};
+        Object[] s = new String[] {"1","2","3"};
         include.setAccessible(true);
         include.set(rule, Arrays.asList(s));
         //include.set(rule, s);     wrong
         System.out.println(rule);
     }
+
 }

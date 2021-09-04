@@ -1,8 +1,8 @@
 package cn.shijh.argmous.test;
 
-import cn.shijh.argmous.context.ArrayParamCheck;
-import cn.shijh.argmous.context.ParamCheck;
-import cn.shijh.argmous.context.ParamChecks;
+import cn.shijh.argmous.spring.context.ArrayParamCheck;
+import cn.shijh.argmous.spring.context.ParamCheck;
+import cn.shijh.argmous.spring.context.ParamChecks;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

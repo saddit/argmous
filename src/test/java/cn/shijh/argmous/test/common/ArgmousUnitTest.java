@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 
 @SpringBootTest(classes = TestApplication.class)
+@SuppressWarnings("all")
 public class ArgmousUnitTest {
     @Autowired
     private TestComponent testComponent;
@@ -48,5 +49,20 @@ public class ArgmousUnitTest {
         data.setList(Arrays.asList("1","2"));
         data.setString("asa");
         testComponent.arrayTest(Arrays.asList(data,data,data));
+    }
+
+    @Test
+    void test4() throws Exception {
+        try {
+            TestData data = new TestData();
+            data.setADouble(1.3);
+            data.setInteger(50);
+            data.setList(Arrays.asList("1","2"));
+            data.setString("bsa");
+            testComponent.test(data);
+            throw new IllegalStateException("test fail");
+        } catch (ParamCheckException e) {
+            System.out.println("pass:" + e.getMessage());
+        }
     }
 }
