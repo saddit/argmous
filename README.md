@@ -10,24 +10,12 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    <dependencies>
        <dependency>
            <groupId>cn.shijh</groupId>
-           <artifactId>argmous</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-web</artifactId>
-       </dependency>
-       <dependency>
-           <groupId>org.projectlombok</groupId>
-           <artifactId>lombok</artifactId>
-           <optional>true</optional>
-       </dependency>
-       <dependency>
-           <groupId>org.springframework.boot</groupId>
-           <artifactId>spring-boot-starter-aop</artifactId>
+           <artifactId>argmous-spring-boot-starter</artifactId>
+           <version>1.0.0-BETA</version>
        </dependency>
    </dependencies>
    ```
-
+   
 2. write a controller and handler  `ParamCheckException`
 
    in this case, we limit length of **s** greater or equal than **1** and less than **3** and limit value of **i** greater or equal than **0** and less than **5** （you can customize the rules of validation)
@@ -111,14 +99,14 @@ public interface RuleValidator {
      * @return true if passed
      * @throws IllegalStateException if something got wrong
      */
-    boolean validate(Object object, ParamCheck rule) throws IllegalStateException;
+    boolean validate(Object object, ValidationRule rule) throws IllegalStateException;
 
     /**
      * return the notify message of an no passed validating
      * @param rule rule
      * @return notify message
      */
-    String errorMessage(ParamCheck rule);
+    String errorMessage(ValidationRule rule);
 
     /**
      * does support to be checked ?
@@ -126,7 +114,7 @@ public interface RuleValidator {
      * @param rule rule
      * @return true if supported
      */
-    boolean support(Class<?> paramType, ParamCheck rule);
+    boolean support(Class<?> paramType, ValidationRule rule);
 }
 ```
 
