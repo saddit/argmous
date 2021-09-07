@@ -13,7 +13,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.0.0-BETA</version>
+           <version>1.0.1-BETA</version>
        </dependency>
    </dependencies>
    ```
@@ -87,6 +87,10 @@ we provide lots of validators
 
 > 1. size {n} and {n, -1} means [n, +∞)
 > 2. range {"n"} and {"n", ""} means [n, +∞)
+
+### Use Cache
+
+In order to have a better performacement, you can use spring-cache and no need any more configurate for it.
 
 ### Expand validator
 
