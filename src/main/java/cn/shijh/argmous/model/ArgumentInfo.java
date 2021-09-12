@@ -9,5 +9,5 @@ public class ArgumentInfo {
     private Object value;
     private Class<?> type;
     private String name;
-    private String parentName;
+    private String belongTo;
 }
