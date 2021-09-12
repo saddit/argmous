@@ -5,9 +5,9 @@ import cn.shijh.argmous.manager.validation.ArrayValidationManager;
 import cn.shijh.argmous.manager.validation.ValidationManager;
 import cn.shijh.argmous.model.ArgumentInfo;
 import cn.shijh.argmous.model.ValidationRule;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,7 +28,7 @@ public abstract class AbstractValidationManager implements ValidationManager, Ar
     }
 
     protected <T extends ArgumentInfo> Stream<T> filterAllowed(Stream<T> stream, ValidationRule rule) {
-        return stream.filter(s -> isTarget(rule, s.getParentName()) && isAllowCheck(rule, s.getName()));
+        return stream.filter(s -> isTarget(rule, s.getBelongTo()) && isAllowCheck(rule, s.getName()));
     }
 
     protected abstract void doValidate(Collection<ArgumentInfo> currentArgs, ValidationRule currentRule) throws ParamCheckException;
@@ -44,7 +44,7 @@ public abstract class AbstractValidationManager implements ValidationManager, Ar
     public void validate(Collection<ArgumentInfo> argument, Collection<ValidationRule> rule, String target) throws ParamCheckException {
         List<ArgumentInfo> elementArg = argument.stream()
                 .filter(arg -> Collection.class.isAssignableFrom(arg.getType()))
-                .filter(arg -> arg.getName().equals(target))
+                .filter(arg -> target.equals(arg.getName()))
                 .flatMap(argumentInfo -> {
                     Collection<?> coll = (Collection<?>) argumentInfo.getValue();
                     return coll.stream();
@@ -53,7 +53,7 @@ public abstract class AbstractValidationManager implements ValidationManager, Ar
                     ArgumentInfo arg = new ArgumentInfo();
                     arg.setType(element.getClass());
                     arg.setValue(element);
-                    arg.setParentName(target);
+                    arg.setBelongTo(target);
                     return arg;
                 }).collect(Collectors.toList());
         rule.forEach(r -> validate(elementArg, r));

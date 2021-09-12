@@ -2,7 +2,9 @@
 
 Argmous is a light and easy framework to validate arguments on any method because it dependences on spring-aop and just use annotaion to define validation rules.
 
-[Go to argmous-spring-boot-starter project](https://github.com/838239178/argmous-spring-boot-starter)
+:book:[Go to argmous-spring-boot-starter project](https://github.com/838239178/argmous-spring-boot-starter)
+
+:facepunch:[Start on non spring environments](./doc/for_non_spring.md)
 
 ## Quick Start
 
@@ -13,7 +15,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.0.0-BETA</version>
+           <version>1.0.2-BETA</version>
        </dependency>
    </dependencies>
    ```
@@ -21,6 +23,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 2. write a controller and handler  `ParamCheckException`
 
    in this case, we limit length of **s** greater or equal than **1** and less than **3** and limit value of **i** greater or equal than **0** and less than **5** （you can customize the rules of validation)
+
+   *use `@NotValid` to avoid analyzing for some object (will improve performance)*
 
    ```java
    @SpringBootApplication
@@ -44,7 +48,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
                @ParamCheck(include = "s", size = {1,3}),
                @ParamCheck(include = "i", range = {"0","5"})
        })
-       public String testValidate(String s, Integer i) {
+       public String testValidate(String s, Integer i, @NotVaid HttpSession session) {
            return "success";
        }
    }
@@ -70,7 +74,9 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ParamCheck      | include, exclude, size, range, split2array ,split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
 | ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
-| ArrayParamCheck | target, values                                               | If you want to check every element in an(a) array(list), use this to make `ParamCheck` effect all element |
+| ArrayParamCheck | target, values                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
+| NotValid        |                                                              | use to avoid analyzing and checking for argument             |
+| Valid           | value                                                        | for non spring environments. in order to mark argument's name |
 
 > :information_source: not recommend use `ArrayParamCheck` to a large array
 
