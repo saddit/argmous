@@ -15,7 +15,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.0.2-BETA</version>
+           <version>1.0.2-RELEASE</version>
        </dependency>
    </dependencies>
    ```
@@ -126,5 +126,5 @@ public interface RuleValidator {
 }
 ```
 
-> we provide `CustomizeUtils` to help slove custom args
+> we provide `CustomizeUtils` to help solve custom args
 
