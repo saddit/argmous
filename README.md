@@ -128,6 +128,10 @@ public interface RuleValidator {
 
 > we provide `CustomizeUtils` to help solve custom args
 
+### Use Cache
+
+In order to have a better performacement, you can use spring-cache and no need any more configurate for it.
+
 ## Architecture
 
 ![Architecture](https://cdn.jsdelivr.net/gh/838239178/PicgoBed@main/img/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6%20(1).jpg)
