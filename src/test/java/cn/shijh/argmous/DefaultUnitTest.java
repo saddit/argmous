@@ -16,7 +16,8 @@ public class DefaultUnitTest {
     @Before
     public void setUp() throws Exception {
         ArgmousProxyFactory jdkProxyFactory = ArgmousProxyFactory.builder().build();
-        targetService = (TargetService) jdkProxyFactory.proxy(new TargetServiceImpl());
+        //targetService = (TargetService) jdkProxyFactory.proxy(new TargetServiceImpl());
+        targetService = (TargetService) jdkProxyFactory.newProxyInstance(TargetServiceImpl.class);
     }
 
     @Test

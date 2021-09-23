@@ -10,6 +10,8 @@ import cn.shijh.argmous.service.ArgmousService;
 import cn.shijh.argmous.service.impl.ArgmousServiceImpl;
 import lombok.AllArgsConstructor;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
 @AllArgsConstructor
@@ -29,5 +31,18 @@ public class JDKProxyFactory implements ArgmousProxyFactory {
         Class<?> clazz = target.getClass();
         return Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(),
                 new ParamCheckInvocationHandler(validationRuleFactory,argumentInfoFactory, argmousService, target));
+    }
+
+    @Override
+    public Object newProxyInstance(Class<?> instanceClass) {
+        try {
+            Constructor<?> constructor = instanceClass.getConstructor();
+            Object o = constructor.newInstance();
+            return proxy(o);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("error init " + instanceClass.getName() + ", hadn't constructor of empty");
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }
