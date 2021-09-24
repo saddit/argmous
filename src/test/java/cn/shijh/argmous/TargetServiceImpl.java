@@ -24,12 +24,22 @@ public class TargetServiceImpl implements TargetService {
         System.out.println("pass");
     }
 
-    @Override
     @ArrayParamCheck(target = "ss", value = {
             @ParamCheck(size = {2,-1}),
             @ParamCheck(regexp = "^a+.*")
     })
     public void test3(@Valid("ss") Collection<String> ss) {
         System.out.println("pass");
+    }
+
+    @Override
+    public void testBean(@Valid("bean") TestBean bean) {
+        System.out.println(bean);
+    }
+
+    @ParamCheck(include = "name", regexp = "b.*")
+    @Override
+    public void testBeanOverride(@Valid("bean") TestBean bean) {
+        System.out.println(bean);
     }
 }

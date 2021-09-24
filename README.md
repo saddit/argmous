@@ -15,7 +15,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.0.2-RELEASE</version>
+           <version>1.1.0-BETA</version>
        </dependency>
    </dependencies>
    ```
@@ -64,7 +64,66 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    http://localhost:8080/test?s=ab&i=100
    ```
 
+
+### Bean Validation
+
+> Only support on version 1.1.0
+
+1. use annotaion like this :arrow_down:
+
+    ```java
+    public class TestBean {
+        
+        @Regexp("a.*")
+        @Size({-1,4})
+        @Required
+        private String name;
+    }
+    ```
+    
+    
+
+**Remember that bean's validation would be overried by method annotations**
+
+2. try a case
+
+   ```java
+   @SpringBootApplication
+   @RestController
+   @RequestMapping("/")
+   public class TestApplication {
+   	
+       //...
+       
+       @GetMapping("/test")
+       @ParamChecks({
+               @ParamCheck(include = "s", size = {1,3}),
+               @ParamCheck(include = "i", range = {"0","5"})
+       })
+       public String testValidate(String s, Integer i, @NotVaid HttpSession session) {
+           return "success";
+       }
+       
+       @GetMapping("/testBean")
+       @ParamChecks(include = "name", regexp = "b.*")
+       public String testBeanValidate(TestBean bean) {
+           return "success";
+       }
+   }
+   ```
+
    
+
+   **Ex:**
+
+   ```
+   http://localhost:8080/testBean?name=abb
+   http://localhost:8080/testBean?name=bbc
+   ```
+
+   
+
+
 
 ## Advanced
 
@@ -72,13 +131,24 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 | Name            | args                                                         | Note                                                         |
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ParamCheck      | include, exclude, size, range, split2array ,split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
+| ParamCheck      | include, exclude, size, range, split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
 | ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
 | ArrayParamCheck | target, values                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
 | NotValid        |                                                              | use to avoid analyzing and checking for argument             |
 | Valid           | value                                                        | for non spring environments. in order to mark argument's name |
 
 > :information_source: not recommend use `ArrayParamCheck` to a large array
+
+| Name     | Note                                     |
+| -------- | ---------------------------------------- |
+| Required | as `ParamCheck::required` , default true |
+| Regexp   | as `ParamCheck::regexp`                  |
+| Size     | as `ParamCheck::size`                    |
+| Range    | as `ParamCheck::range`                   |
+| Custom   | as `ParamCheck::custom`                  |
+| Split    | as `ParamCheck::split`                   |
+
+
 
 ### Default Validators
 

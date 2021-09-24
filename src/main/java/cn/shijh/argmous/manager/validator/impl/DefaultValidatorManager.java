@@ -31,7 +31,7 @@ public class DefaultValidatorManager implements ValidatorManager {
     public String validate(ArgumentInfo argument, ValidationRule rule) {
         for (RuleValidator validator : validators) {
             if (validator.support(argument.getType(), rule) && !validator.validate(argument.getValue(), rule)) {
-                return argument.getName() + "," + validator.errorMessage(rule);
+                return argument.getName() + ":" + validator.errorMessage(rule);
             }
         }
         return null;

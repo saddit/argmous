@@ -6,10 +6,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 public class AnnotationBeanUtils {
 
-    private static void arrayResolve(Object array, Field beanFiled, Object bean) throws IllegalAccessException, NoSuchMethodException, InstantiationException, InvocationTargetException {
+    public static void arrayResolve(Object array, Field beanFiled, Object bean) throws IllegalAccessException, NoSuchMethodException, InstantiationException, InvocationTargetException {
         Class<?> arrayType = array.getClass();
         Class<?> componentType = arrayType.getComponentType();
         Object[] curArray;
@@ -49,10 +50,31 @@ public class AnnotationBeanUtils {
                 Object annotationValue = method.invoke(annotation);
                 if ( annotationValue.getClass().isArray()) {
                     arrayResolve(annotationValue, beanField, bean);
-                } else {
+                } else if (beanField.getType().isAssignableFrom(annotationValue.getClass())){
                     beanField.set(bean, annotationValue);
                 }
             } catch (NoSuchFieldException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException ignore) { }
         }
+    }
+
+    /**
+     * mapping annotation value to bean
+     * Map.Key is annotation method name
+     * Map.Value is bean field name
+     */
+    public static void copyProperties(Annotation annotation, Object bean, Map<String, String> mapping) {
+        mapping.forEach((k,v)->{
+            try {
+                Method keyMethod = annotation.getClass().getDeclaredMethod(k);
+                Field valueField = bean.getClass().getDeclaredField(v);
+                valueField.setAccessible(true);
+                Object key = keyMethod.invoke(annotation);
+                if (key.getClass().isArray()) {
+                    AnnotationBeanUtils.arrayResolve(key,valueField, bean);
+                } else {
+                    valueField.set(bean, key);
+                }
+            } catch (Exception ignored) { }
+        });
     }
 }

@@ -5,7 +5,7 @@ import cn.shijh.argmous.factory.ArgumentInfoFactory;
 import cn.shijh.argmous.factory.ValidationRuleFactory;
 import cn.shijh.argmous.factory.arg.DefaultArgumentInfoFactory;
 import cn.shijh.argmous.factory.rule.DefaultValidationRuleFactory;
-import cn.shijh.argmous.handler.ParamCheckInvocationHandler;
+import cn.shijh.argmous.handler.impl.ParamCheckInvocationHandler;
 import cn.shijh.argmous.service.ArgmousService;
 import cn.shijh.argmous.service.impl.ArgmousServiceImpl;
 import lombok.AllArgsConstructor;

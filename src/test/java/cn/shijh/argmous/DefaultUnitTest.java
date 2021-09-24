@@ -40,6 +40,12 @@ public class DefaultUnitTest {
         } catch (ParamCheckException e) {
             System.out.println("test1 error->" + e.getMessage());
         }
+        try {
+            targetService.test1("abbbb");
+            throw new IllegalStateException("test fail: test1 passed");
+        } catch (ParamCheckException e) {
+            System.out.println("test1 error->" + e.getMessage());
+        }
         targetService.test2(s, i);
         targetService.test3(Arrays.asList(s, s));
     }
@@ -77,6 +83,19 @@ public class DefaultUnitTest {
             throw new IllegalStateException("test fail: test3 passed");
         } catch (ParamCheckException e) {
             System.out.println("test3-2 error->" + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBean() throws Exception {
+        TestBean testBean = new TestBean();
+        testBean.setName("a12");
+        targetService.testBean(testBean);
+        try {
+            targetService.testBeanOverride(testBean);
+            throw new IllegalStateException("test fail: test bean override passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean-2 error->" + p.getMessage());
         }
     }
 }

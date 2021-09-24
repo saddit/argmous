@@ -17,11 +17,9 @@ public @interface ParamCheck {
     String regexp() default "";
 
     /**
-     * 仅在在split2Array为true使用
+     * use a char to split a string
      */
-    String split() default ",";
-
-    boolean split2Array() default false;
+    String split() default "";
 
     /**
      * 前闭后开 -1 为不限制 只填一个相当于 [n,+∞）

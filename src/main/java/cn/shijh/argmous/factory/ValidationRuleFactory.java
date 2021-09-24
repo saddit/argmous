@@ -8,4 +8,5 @@ import java.util.Collection;
 public interface ValidationRuleFactory {
     Collection<ValidationRule> createFromAnnotations(ParamCheck[] paramChecks);
     ValidationRule createFromAnnotation(ParamCheck paramCheck);
+    Collection<ValidationRule> createFromBean(Object bean, String name);
 }
