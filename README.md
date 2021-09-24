@@ -69,7 +69,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 ### Bean Validation
 
-> Only support on version 1.1.0
+> Only support on version 1.1.0 or later
 
 1. use annotaion like this :arrow_down:
 
