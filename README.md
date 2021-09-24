@@ -8,6 +8,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 ## Quick Start
 
+### Method Validation
+
 1. add dependences to your `POM.XML` 
 
    ```xml
@@ -80,8 +82,6 @@ Argmous is a light and easy framework to validate arguments on any method becaus
         private String name;
     }
     ```
-    
-    
 
 **Remember that bean's validation would be overried by method annotations**
 
@@ -118,12 +118,11 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
    ```
    http://localhost:8080/testBean?name=abb
-   http://localhost:8080/testBean?name=bbc
+   http://localhost:8080/testBean?name=bbcccc
+   http://localhost:8080/testBean?name=bcd
    ```
 
    
-
-
 
 ## Advanced
 
