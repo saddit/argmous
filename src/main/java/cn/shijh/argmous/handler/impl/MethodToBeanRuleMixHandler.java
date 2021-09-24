@@ -14,20 +14,23 @@ public class MethodToBeanRuleMixHandler implements RuleMixHandler {
         ArrayList<ValidationRule> mixedRules = new ArrayList<>(beanRules);
         //O(N)
         Map<String, ValidationRule> beanRuleMap = beanRules.stream()
-                .collect(Collectors.toMap(i -> i.getTarget() + i.getFirstInclude(), i -> i));
+                .collect(Collectors.toMap(ValidationRule::getFirstInclude, i -> i));
         //O(N*M)
         methodRules.forEach(mr -> {
             if (mr.getInclude().isEmpty()) {
                 mixedRules.add(mr);
             } else {
-                mr.getInclude().forEach(ic -> {
-                    ValidationRule br = beanRuleMap.get(mr.getTarget() + ic);
-                    if (br == null) {
-                        mixedRules.add(mr);
-                    } else {
+                boolean isMatch = false;
+                for (String ic : mr.getInclude()) {
+                    ValidationRule br = beanRuleMap.get(ic);
+                    if (br != null && (mr.getTarget().isEmpty() || br.getTarget().equals(mr.getTarget()))) {
+                        isMatch = true;
                         BeanUtils.copyProperties(mr, br, "include");
                     }
-                });
+                }
+                if (!isMatch) {
+                    mixedRules.add(mr);
+                }
             }
         });
         return mixedRules;

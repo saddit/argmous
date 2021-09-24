@@ -91,12 +91,8 @@ public class DefaultUnitTest {
         TestBean testBean = new TestBean();
         testBean.setName("a12");
         targetService.testBean(testBean);
-        try {
-            targetService.testBeanOverride(testBean);
-            throw new IllegalStateException("test fail: test bean override passed");
-        } catch (ParamCheckException p) {
-            System.out.println("testBean-2 error->" + p.getMessage());
-        }
+        testBean.setName("b12");
+        targetService.testBeanOverride(testBean);
         try {
             testBean.setName("ccc");
             targetService.testBean2(testBean, "a");

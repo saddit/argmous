@@ -29,7 +29,7 @@ public class BeanUtils {
             try {
                 field.setAccessible(true);
                 Object fromValue = field.get(from);
-                Field toField = toClass.getField(field.getName());
+                Field toField = toClass.getDeclaredField(field.getName());
                 toField.setAccessible(true);
                 if (fromValue.getClass().isArray()) {
                     AnnotationBeanUtils.arrayResolve(fromValue, toField, to);
