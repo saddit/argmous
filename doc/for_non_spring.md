@@ -11,7 +11,7 @@ this page is a guide for people who want to use Argmous on non spring environmen
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous</artifactId>
-           <version>1.0.2-BETA</version>
+           <version>1.1.0-BETA</version>
        </dependency>
    </dependencies>
    ```
