@@ -97,5 +97,19 @@ public class DefaultUnitTest {
         } catch (ParamCheckException p) {
             System.out.println("testBean-2 error->" + p.getMessage());
         }
+        try {
+            testBean.setName("ccc");
+            targetService.testBean2(testBean, "a");
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean-3 error->" + p.getMessage());
+        }
+        try {
+            testBean.setName("abc");
+            targetService.testBean2(testBean, "qweqweq");
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean-4 error->" + p.getMessage());
+        }
     }
 }

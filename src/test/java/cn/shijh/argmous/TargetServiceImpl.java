@@ -15,6 +15,12 @@ public class TargetServiceImpl implements TargetService {
         System.out.println("pass");
     }
 
+    @ParamCheck(include = "s", size = {-1, 2})
+    @Override
+    public void testBean2(TestBean bean, @Valid("s") String s) {
+        System.out.println("success");
+    }
+
     @Override
     @ParamChecks({
             @ParamCheck(include = "a", size = {2,-1}),

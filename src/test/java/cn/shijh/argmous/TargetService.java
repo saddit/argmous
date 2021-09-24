@@ -16,5 +16,7 @@ public interface TargetService {
 
     void testBean(TestBean bean);
 
+    void testBean2(TestBean bean, String s);
+
     void testBeanOverride(TestBean bean);
 }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class MethodToBeanRuleMixHandler implements RuleMixHandler {
     @Override
     public Collection<ValidationRule> mix(Collection<ValidationRule> beanRules, Collection<ValidationRule> methodRules) {
-        ArrayList<ValidationRule> mixedRules = new ArrayList<>(beanRules.size());
+        ArrayList<ValidationRule> mixedRules = new ArrayList<>(beanRules);
         //O(N)
         Map<String, ValidationRule> beanRuleMap = beanRules.stream()
                 .collect(Collectors.toMap(i -> i.getTarget() + i.getFirstInclude(), i -> i));
@@ -26,7 +26,6 @@ public class MethodToBeanRuleMixHandler implements RuleMixHandler {
                         mixedRules.add(mr);
                     } else {
                         BeanUtils.copyProperties(mr, br, "include");
-                        mixedRules.add(br);
                     }
                 });
             }
