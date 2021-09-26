@@ -2,8 +2,6 @@ package cn.shijh.argmous;
 
 import cn.shijh.argmous.exception.ParamCheckException;
 import cn.shijh.argmous.factory.ArgmousProxyFactory;
-import cn.shijh.argmous.factory.proxy.JDKProxyFactory;
-import cn.shijh.argmous.manager.validator.impl.DefaultValidatorManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -106,6 +104,19 @@ public class DefaultUnitTest {
             throw new IllegalStateException("test fail: test passed");
         } catch (ParamCheckException p) {
             System.out.println("testBean-4 error->" + p.getMessage());
+        }
+    }
+
+    @Test
+    public void testBean3() throws Exception {
+        TestBean testBean = new TestBean();
+        testBean.setName("abb");
+        testBean.setNum(11);
+        try {
+            targetService.test4(testBean);
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean3 error->" + p.getMessage());
         }
     }
 }

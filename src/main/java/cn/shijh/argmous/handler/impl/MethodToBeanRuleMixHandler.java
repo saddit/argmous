@@ -14,18 +14,27 @@ public class MethodToBeanRuleMixHandler implements RuleMixHandler {
         ArrayList<ValidationRule> mixedRules = new ArrayList<>(beanRules);
         //O(N)
         Map<String, ValidationRule> beanRuleMap = beanRules.stream()
-                .collect(Collectors.toMap(ValidationRule::getFirstInclude, i -> i));
-        //O(N*M)
+                .collect(Collectors.toMap(i -> i.getTarget() + i.getFirstInclude(), i -> i));
+        //O(N*M)~O(N^2)
         methodRules.forEach(mr -> {
-            if (mr.getInclude().isEmpty()) {
-                mixedRules.add(mr);
+            if (!mr.getInclude().isEmpty()) {
+                for (String ic : mr.getInclude()) {
+                    ValidationRule br = beanRuleMap.get(mr.getTarget() + ic);
+                    if (br != null) {
+                        BeanUtils.copyProperties(mr, br, "include", "exclude", "target");
+                    } else {
+                        br = new ValidationRule();
+                        br.addInclude(ic);
+                        BeanUtils.copyProperties(mr, br, "include", "exclude");
+                        mixedRules.add(br);
+                    }
+                }
             } else {
                 boolean isMatch = false;
-                for (String ic : mr.getInclude()) {
-                    ValidationRule br = beanRuleMap.get(ic);
-                    if (br != null && (mr.getTarget().isEmpty() || br.getTarget().equals(mr.getTarget()))) {
+                for (ValidationRule mixedRule : mixedRules) {
+                    if (mixedRule.getTarget().equals(mr.getTarget())) {
                         isMatch = true;
-                        BeanUtils.copyProperties(mr, br, "include");
+                        BeanUtils.copyProperties(mr, mixedRule, "include", "exclude", "target");
                     }
                 }
                 if (!isMatch) {

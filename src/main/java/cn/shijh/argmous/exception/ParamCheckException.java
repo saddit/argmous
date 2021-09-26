@@ -1,8 +1,7 @@
 package cn.shijh.argmous.exception;
 
-public class ParamCheckException extends RuntimeException{
+public class ParamCheckException extends ArgmousBaseException{
     public ParamCheckException() {
-        super();
     }
 
     public ParamCheckException(String message) {
@@ -17,7 +16,7 @@ public class ParamCheckException extends RuntimeException{
         super(cause);
     }
 
-    protected ParamCheckException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ParamCheckException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

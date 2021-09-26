@@ -47,8 +47,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    	
        @GetMapping("/test")
        @ParamChecks({
-               @ParamCheck(include = "s", size = {1,3}),
-               @ParamCheck(include = "i", range = {"0","5"})
+               @ParamCheck(size = {1,3}, target = "s"),
+               @ParamCheck(range = {"0","5"}, target = "i")
        })
        public String testValidate(String s, Integer i, @NotVaid HttpSession session) {
            return "success";
@@ -71,7 +71,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 > Only support on version 1.1.0
 
-1. use annotaion like this :arrow_down:
+1. use annotation like this :arrow_down:
 
     ```java
     public class TestBean {
@@ -83,7 +83,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
     }
     ```
 
-**Remember that bean's validation would be overried by method annotations**
+**Remember that bean's validation would be overridden by method annotations**
 
 2. try a case
 
@@ -105,7 +105,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        }
        
        @GetMapping("/testBean")
-       @ParamChecks(include = "name", regexp = "b.*")
+       @ParamCheck(include = "name", regexp = "b.*", target = "bean")
        public String testBeanValidate(TestBean bean) {
            return "success";
        }
@@ -130,13 +130,15 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 | Name            | args                                                         | Note                                                         |
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ParamCheck      | include, exclude, size, range, split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
-| ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
+| ParamCheck      | include, size, range, split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
+| ParamChecks     | values                                                       | with this annotation, more than two `ParamCheck` can be used  |
 | ArrayParamCheck | target, values                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
 | NotValid        |                                                              | use to avoid analyzing and checking for argument             |
 | Valid           | value                                                        | for non spring environments. in order to mark argument's name |
 
 > :information_source: not recommend use `ArrayParamCheck` to a large array
+>
+> :warning: If method have more than one argument you must use `target` on `@ParamCheck` unless you just want to validate first argument 
 
 | Name     | Note                                     |
 | -------- | ---------------------------------------- |
@@ -156,7 +158,7 @@ we provide lots of validators
 | Name                | Note                                                         |
 | :------------------ | :----------------------------------------------------------- |
 | RequiredValidator   | make sure arg is not `null` or `""`  (if arg is a string)  if `ParamCheck-required` is true |
-| SizeValidatator     | check arg with `ParamCheck-size` when size is not empty and arg is array or string. |
+| SizeValidator     | check arg with `ParamCheck-size` when size is not empty and arg is array or string. |
 | ValueRangeValidator | check arg value with `ParamCheck-ragne`  when range is not empty and arg is number. |
 | RegexpValidator     | make sure arg matches the `ParamCheck-regexp` when regexp is not empty and arg is string |
 

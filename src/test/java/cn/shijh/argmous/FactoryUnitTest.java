@@ -1,7 +1,7 @@
 package cn.shijh.argmous;
 
 import cn.shijh.argmous.factory.ValidationRuleFactory;
-import cn.shijh.argmous.factory.rule.DefaultValidationRuleFactory;
+import cn.shijh.argmous.factory.impl.DefaultValidationRuleFactory;
 import cn.shijh.argmous.model.ValidationRule;
 import org.junit.Assert;
 import org.junit.Before;

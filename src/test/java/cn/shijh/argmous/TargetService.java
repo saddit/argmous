@@ -19,4 +19,6 @@ public interface TargetService {
     void testBean2(TestBean bean, String s);
 
     void testBeanOverride(TestBean bean);
+
+    void test4(@Valid("bean") TestBean bean);
 }

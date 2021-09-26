@@ -11,5 +11,5 @@ public @interface ArrayParamCheck {
     String id() default "";
     ParamCheck[] value() default {};
     boolean required() default true;
-    String target() default "";
+    String target();
 }

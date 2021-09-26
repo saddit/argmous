@@ -37,7 +37,5 @@ public @interface ParamCheck {
 
     String[] include() default {};
 
-    String[] exclude() default {};
-
     String[] custom() default {};
 }

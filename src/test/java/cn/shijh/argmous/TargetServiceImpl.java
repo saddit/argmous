@@ -10,12 +10,12 @@ import java.util.Collection;
 public class TargetServiceImpl implements TargetService {
 
     @Override
-    @ParamCheck(size = {-1,3}, regexp = "^a+.*")
+    @ParamCheck(size = {-1,3}, regexp = "^a+.*", target = "s")
     public void test1(@Valid("s") String  s) {
         System.out.println("pass");
     }
 
-    @ParamCheck(include = "s", size = {-1, 2})
+    @ParamCheck(size = {-1, 2}, target = "s")
     @Override
     public void testBean2(TestBean bean, @Valid("s") String s) {
         System.out.println("success");
@@ -23,8 +23,8 @@ public class TargetServiceImpl implements TargetService {
 
     @Override
     @ParamChecks({
-            @ParamCheck(include = "a", size = {2,-1}),
-            @ParamCheck(include = "b", range = {"1","3"})
+            @ParamCheck(size = {2,-1}, target = "a"),
+            @ParamCheck(range = {"1","3"}, target = "b")
     })
     public void test2(@Valid("a") String a, @Valid("b") Integer b) {
         System.out.println("pass");
@@ -43,9 +43,16 @@ public class TargetServiceImpl implements TargetService {
         System.out.println(bean);
     }
 
-    @ParamCheck(include = "name", regexp = "b.*")
+    @ParamCheck(include = "name", regexp = "b.*", target = "bean")
     @Override
     public void testBeanOverride(@Valid("bean") TestBean bean) {
         System.out.println(bean);
     }
+
+    @ParamCheck(include = "num", range = {"0", "11"}, target = "bean")
+    @Override
+    public void test4(@Valid("bean") TestBean bean) {
+        System.out.println(bean);
+    }
+
 }

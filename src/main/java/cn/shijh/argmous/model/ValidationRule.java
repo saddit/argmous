@@ -24,8 +24,6 @@ public class ValidationRule {
 
     private Collection<String> include;
 
-    private Collection<String> exclude;
-
     private Collection<String> custom;
 
     public ValidationRule(String target) {
@@ -56,7 +54,6 @@ public class ValidationRule {
                 new ArrayList<>(),
                 false,
                 "",
-                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>());
     }

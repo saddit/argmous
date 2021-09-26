@@ -1,7 +1,8 @@
-package cn.shijh.argmous.factory.rule;
+package cn.shijh.argmous.factory.impl;
 
 import cn.shijh.argmous.annotation.IsRule;
 import cn.shijh.argmous.annotation.ParamCheck;
+import cn.shijh.argmous.exception.RuleCreateException;
 import cn.shijh.argmous.factory.ValidationRuleFactory;
 import cn.shijh.argmous.model.ValidationRule;
 import cn.shijh.argmous.util.AnnotationBeanUtils;
@@ -14,16 +15,19 @@ import java.util.stream.Collectors;
 
 public class DefaultValidationRuleFactory implements ValidationRuleFactory {
     @Override
-    public Collection<ValidationRule> createFromAnnotations(ParamCheck[] paramChecks) {
+    public Collection<ValidationRule> createFromAnnotations(ParamCheck[] paramChecks, String defaultTargetName) {
         return Arrays.stream(paramChecks)
-                .map(this::createFromAnnotation)
+                .map(i->this.createFromAnnotation(i, defaultTargetName))
                 .collect(Collectors.toList());
     }
-
+    
     @Override
-    public ValidationRule createFromAnnotation(ParamCheck paramCheck) {
+    public ValidationRule createFromAnnotation(ParamCheck paramCheck, String defaultTargetName) {
         ValidationRule validationRule = new ValidationRule();
         AnnotationBeanUtils.copyProperties(paramCheck, validationRule);
+        if (validationRule.getTarget().isEmpty()) {
+            validationRule.setTarget(defaultTargetName);
+        }
         return validationRule;
     }
 

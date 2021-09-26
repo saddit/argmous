@@ -10,4 +10,6 @@ public class TestBean {
     @Regexp("a.*")
     @Size({-1,4})
     private String name;
+    
+    private Integer num;
 }
