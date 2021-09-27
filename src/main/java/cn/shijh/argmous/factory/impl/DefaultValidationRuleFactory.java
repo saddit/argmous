@@ -1,5 +1,6 @@
 package cn.shijh.argmous.factory.impl;
 
+import cn.shijh.argmous.annotation.ArrayParamCheck;
 import cn.shijh.argmous.annotation.IsRule;
 import cn.shijh.argmous.annotation.ParamCheck;
 import cn.shijh.argmous.exception.RuleCreateException;
@@ -29,6 +30,19 @@ public class DefaultValidationRuleFactory implements ValidationRuleFactory {
             validationRule.setTarget(defaultTargetName);
         }
         return validationRule;
+    }
+
+    @Override
+    public Collection<ValidationRule> createFromAnnotation(ArrayParamCheck arrayParamCheck, String defaultTargetName) throws RuleCreateException {
+        Collection<ValidationRule> fromAnnotations = createFromAnnotations(arrayParamCheck.value(), defaultTargetName);
+        int count = 0;
+        String targetName = arrayParamCheck.target().isEmpty() ? defaultTargetName : arrayParamCheck.target();
+        for (ValidationRule r : fromAnnotations) {
+            r.setTarget(targetName + "[" + (count++) + "]");
+        }
+        ValidationRule selfRule = createFromAnnotation(arrayParamCheck.self(), targetName);
+        fromAnnotations.add(selfRule);
+        return fromAnnotations;
     }
 
     @Override

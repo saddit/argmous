@@ -15,12 +15,14 @@ import cn.shijh.argmous.service.ArgmousService;
 import cn.shijh.argmous.service.impl.ArgmousServiceImpl;
 import cn.shijh.argmous.util.BeanUtils;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ParamCheckInvocationHandler implements InvocationHandler {
     private final ValidationRuleFactory validationRuleFactory;
@@ -48,7 +50,7 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
     }
 
     /**
-     *  需要进一步优化
+     * 需要进一步优化
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws ParamCheckException, InvocationTargetException, IllegalAccessException {
@@ -80,12 +82,6 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
                 validationRules.addAll(validationRuleFactory.createFromAnnotations(multi.value(), defaultTargetName.get()));
                 argmousService.paramCheck(argumentInfos, ruleMixHandler.mix(beanRules, validationRules));
             } else if (array != null) {
-                validationRules.addAll(
-                        validationRuleFactory.createFromAnnotations(array.value(),
-                                array.target().isEmpty() ? defaultTargetName.get() : array.target())
-                );
-                ValidationRule selfRule = validationRuleFactory.createFromAnnotation(array.self(),
-                        array.target().isEmpty() ? defaultTargetName.get() : array.target());
                 List<ArgumentInfo> arrayArgInfos = argumentInfos.stream()
                         .filter(i -> i.getValue() instanceof Collection)
                         .flatMap(
@@ -93,8 +89,15 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
                                         .createFromArray((Collection<?>) i.getValue(), i.getName()).stream()
                         )
                         .collect(Collectors.toList());
-                argmousService.paramCheck(argumentInfos, Collections.singletonList(selfRule));
-                argmousService.paramCheck(arrayArgInfos, ruleMixHandler.mix(beanRules, validationRules));
+                validationRules.addAll(
+                        validationRuleFactory.createFromAnnotation(array, defaultTargetName.get())
+                );
+                //add element's class rules
+                argumentInfos.stream().findFirst().ifPresent(arg->
+                        validationRules.addAll(validationRuleFactory.createFromBean(arg.getType(), defaultTargetName.get())
+                ));
+                argumentInfos.addAll(arrayArgInfos);
+                argmousService.paramCheck(argumentInfos, ruleMixHandler.mix(beanRules, validationRules));
             } else if (!beanRules.isEmpty()) {
                 argmousService.paramCheck(argumentInfos, beanRules);
             }
