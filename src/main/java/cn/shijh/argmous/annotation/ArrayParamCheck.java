@@ -11,5 +11,5 @@ public @interface ArrayParamCheck {
     String id() default "";
     ParamCheck[] value() default {};
     ParamCheck self() default @ParamCheck(size = {1,-1});
-    String target();
+    String target() default "";
 }

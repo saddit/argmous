@@ -93,9 +93,12 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
                         validationRuleFactory.createFromAnnotation(array, defaultTargetName.get())
                 );
                 //add element's class rules
-                argumentInfos.stream().findFirst().ifPresent(arg->
-                        validationRules.addAll(validationRuleFactory.createFromBean(arg.getType(), defaultTargetName.get())
-                ));
+                argumentInfos.stream().findFirst()
+                        .ifPresent(arg -> {
+                            if (BeanUtils.isBean(arg.getType())) {
+                                validationRules.addAll(validationRuleFactory.createFromBean(arg.getType(), defaultTargetName.get()));
+                            }
+                        });
                 argumentInfos.addAll(arrayArgInfos);
                 argmousService.paramCheck(argumentInfos, ruleMixHandler.mix(beanRules, validationRules));
             } else if (!beanRules.isEmpty()) {

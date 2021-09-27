@@ -34,13 +34,10 @@ public class DefaultValidationRuleFactory implements ValidationRuleFactory {
 
     @Override
     public Collection<ValidationRule> createFromAnnotation(ArrayParamCheck arrayParamCheck, String defaultTargetName) throws RuleCreateException {
-        Collection<ValidationRule> fromAnnotations = createFromAnnotations(arrayParamCheck.value(), defaultTargetName);
-        int count = 0;
         String targetName = arrayParamCheck.target().isEmpty() ? defaultTargetName : arrayParamCheck.target();
-        for (ValidationRule r : fromAnnotations) {
-            r.setTarget(targetName + "[" + (count++) + "]");
-        }
+        Collection<ValidationRule> fromAnnotations = createFromAnnotations(arrayParamCheck.value(), targetName);
         ValidationRule selfRule = createFromAnnotation(arrayParamCheck.self(), targetName);
+        selfRule.addInclude(targetName);
         fromAnnotations.add(selfRule);
         return fromAnnotations;
     }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class AnnotationBeanUtils {
             curArray = (Object[]) array;
         }
         if (Collection.class.isAssignableFrom(beanFiled.getType())) {
-            beanFiled.set(bean, Arrays.asList(curArray));
+            beanFiled.set(bean, new ArrayList<>(Arrays.asList(curArray)));
         } else if (beanFiled.getType().isArray()) {
             beanFiled.set(bean, array);
         }
