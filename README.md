@@ -1,5 +1,5 @@
 
-> version 1.1.0 has a terrible bug, please wait version 1.1.1
+> please use version 1.1.1 or later ❗❗❗❗
 
 # ARGMOUS
 
@@ -20,7 +20,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.1.0-BETA</version>
+           <version>1.1.1-BETA</version>
        </dependency>
    </dependencies>
    ```
