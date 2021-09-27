@@ -134,8 +134,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 | Name            | args                                                         | Note                                                         |
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ParamCheck      | include, size, range, split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
-| ParamChecks     | values                                                       | with this annotation, more than two `ParamCheck` can be used  |
-| ArrayParamCheck | target, values                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
+| ParamChecks     | values, id                                                       | with this annotation, more than two `ParamCheck` can be used  |
+| ArrayParamCheck | target, values, self, id                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
 | NotValid        |                                                              | use to avoid analyzing and checking for argument             |
 | Valid           | value                                                        | for non spring environments. in order to mark argument's name |
 
