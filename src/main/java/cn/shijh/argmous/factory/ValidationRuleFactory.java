@@ -11,5 +11,5 @@ public interface ValidationRuleFactory {
 
     ValidationRule createFromAnnotation(ParamCheck paramCheck, String defaultTargetName) throws RuleCreateException;
 
-    Collection<ValidationRule> createFromBean(Object bean, String name) throws RuleCreateException;
+    Collection<ValidationRule> createFromBean(Class<?> beanType, String name) throws RuleCreateException;
 }

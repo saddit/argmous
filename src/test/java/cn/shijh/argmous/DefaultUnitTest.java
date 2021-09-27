@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @SuppressWarnings("all")
 public class DefaultUnitTest {
@@ -81,6 +82,26 @@ public class DefaultUnitTest {
             throw new IllegalStateException("test fail: test3 passed");
         } catch (ParamCheckException e) {
             System.out.println("test3-2 error->" + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNullArray() throws Exception {
+        try {
+            targetService.test3(null);
+            throw new IllegalStateException("test fail: test3 passed");
+        } catch (ParamCheckException e) {
+            System.out.println("test3-1 error->" + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testEmptyArray() throws Exception {
+        try {
+            targetService.test3(Collections.emptyList());
+            throw new IllegalStateException("test fail: test3 passed");
+        } catch (ParamCheckException e) {
+            System.out.println("test3-1 error->" + e.getMessage());
         }
     }
 

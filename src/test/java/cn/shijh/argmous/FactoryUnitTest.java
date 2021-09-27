@@ -21,7 +21,7 @@ public class FactoryUnitTest {
     @Test
     public void ruleFactory() throws Exception {
         TestBean b = new TestBean();
-        Collection<ValidationRule> rules = ruleFactory.createFromBean(b, "testBean");
+        Collection<ValidationRule> rules = ruleFactory.createFromBean(b.getClass(), "testBean");
         System.out.println(rules);
         Assert.assertEquals(1, rules.size());
         ValidationRule validationRule = rules.stream().findFirst().get();

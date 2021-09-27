@@ -7,6 +7,7 @@ import cn.shijh.argmous.annotation.Valid;
 
 import java.util.Collection;
 
+@SuppressWarnings("all")
 public class TargetServiceImpl implements TargetService {
 
     @Override
@@ -33,7 +34,7 @@ public class TargetServiceImpl implements TargetService {
     @ArrayParamCheck(target = "ss", value = {
             @ParamCheck(size = {2,-1}),
             @ParamCheck(regexp = "^a+.*")
-    })
+    }, self = @ParamCheck(required = true, size = {1, -1}, target = "ss"))
     public void test3(@Valid("ss") Collection<String> ss) {
         System.out.println("pass");
     }

@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 public @interface ArrayParamCheck {
     String id() default "";
     ParamCheck[] value() default {};
-    boolean required() default true;
+    ParamCheck self() default @ParamCheck(size = {1,-1});
     String target();
 }

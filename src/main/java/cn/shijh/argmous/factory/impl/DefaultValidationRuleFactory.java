@@ -32,8 +32,8 @@ public class DefaultValidationRuleFactory implements ValidationRuleFactory {
     }
 
     @Override
-    public Collection<ValidationRule> createFromBean(Object bean, String name) {
-        Field[] fields = bean.getClass().getDeclaredFields();
+    public Collection<ValidationRule> createFromBean(Class<?> type, String name) {
+        Field[] fields = type.getDeclaredFields();
         Collection<ValidationRule> rules = new ArrayList<>(fields.length);
         AtomicBoolean shouldValid = new AtomicBoolean(false);
         for (Field field : fields) {

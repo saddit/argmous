@@ -20,6 +20,6 @@ public class RequiredValidator implements RuleValidator {
 
     @Override
     public boolean validate(Object object, ValidationRule rule) {
-        return (object != null && StringUtils.isNotBlank(object.toString())) || !rule.getRequired();
+        return !rule.getRequired() || (object != null && StringUtils.isNotBlank(object.toString()));
     }
 }

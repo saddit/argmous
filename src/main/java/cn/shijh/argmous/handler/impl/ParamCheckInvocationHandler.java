@@ -18,9 +18,7 @@ import cn.shijh.argmous.util.BeanUtils;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -73,7 +71,7 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
                         }
                     })
                     .filter(ri -> BeanUtils.isBean(ri.getType()))
-                    .flatMap(ri -> validationRuleFactory.createFromBean(ri.getValue(), ri.getName()).stream())
+                    .flatMap(ri -> validationRuleFactory.createFromBean(ri.getType(), ri.getName()).stream())
                     .collect(Collectors.toList());
             if (single != null) {
                 validationRules.add(validationRuleFactory.createFromAnnotation(single, defaultTargetName.get()));
@@ -86,13 +84,16 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
                         validationRuleFactory.createFromAnnotations(array.value(),
                                 array.target().isEmpty() ? defaultTargetName.get() : array.target())
                 );
+                ValidationRule selfRule = validationRuleFactory.createFromAnnotation(array.self(),
+                        array.target().isEmpty() ? defaultTargetName.get() : array.target());
                 List<ArgumentInfo> arrayArgInfos = argumentInfos.stream()
                         .filter(i -> i.getValue() instanceof Collection)
                         .flatMap(
-                                i -> argumentInfoFactory.createFromArray((Collection<?>) i.getValue(), i.getName())
-                                        .stream()
+                                i -> argumentInfoFactory
+                                        .createFromArray((Collection<?>) i.getValue(), i.getName()).stream()
                         )
                         .collect(Collectors.toList());
+                argmousService.paramCheck(argumentInfos, Collections.singletonList(selfRule));
                 argmousService.paramCheck(arrayArgInfos, ruleMixHandler.mix(beanRules, validationRules));
             } else if (!beanRules.isEmpty()) {
                 argmousService.paramCheck(argumentInfos, beanRules);
