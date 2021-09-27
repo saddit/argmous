@@ -5,11 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ArrayParamCheck {
-    String id() default "";
-    ParamCheck[] value() default {};
-    ParamCheck self() default @ParamCheck(size = {1,-1});
-    String target() default "";
+@Target(ElementType.ANNOTATION_TYPE)
+public @interface IsRule {
+    String value();
 }

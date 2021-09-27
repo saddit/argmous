@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class SizeValidator implements RuleValidator {
     @Override
     public boolean support(Class<?> paramType, ValidationRule rule) {
-        return rule.getRange().size() > 0
+        return rule.getSize().size() > 0
                 && (Collection.class.isAssignableFrom(paramType)
-                || rule.getSplit2Array()
+                || !rule.getSplit().isEmpty()
                 || String.class.isAssignableFrom(paramType));
     }
 
@@ -39,7 +39,7 @@ public class SizeValidator implements RuleValidator {
             length = lengthCheck(rule, param, size[0], -1, 0);
         }
         if (size.length > 1 && size[1] != -1) {
-            length = length && lengthCheck(rule, param, size[0], 1);
+            length = length && lengthCheck(rule, param, size[1], 1);
         }
         return length;
     }
@@ -54,7 +54,7 @@ public class SizeValidator implements RuleValidator {
             l = ((Collection<?>) o).size();
         } else if (o.getClass().isArray()) {
             l = Array.getLength(o);
-        } else if (validationRule.getSplit2Array()) {
+        } else if (!validationRule.getSplit().isEmpty()) {
             String[] array = o.toString().split(validationRule.getSplit());
             l = array.length;
         } else if (o instanceof String) {

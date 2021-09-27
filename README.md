@@ -1,3 +1,6 @@
+
+> please use version 1.1.1 or later ❗❗❗❗
+
 # ARGMOUS
 
 Argmous is a light and easy framework to validate arguments on any method because it dependences on spring-aop and just use annotaion to define validation rules.
@@ -8,6 +11,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 ## Quick Start
 
+### Method Validation
+
 1. add dependences to your `POM.XML` 
 
    ```xml
@@ -15,7 +20,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>cn.shijh</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.0.2-BETA</version>
+           <version>1.1.1-BETA</version>
        </dependency>
    </dependencies>
    ```
@@ -45,8 +50,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    	
        @GetMapping("/test")
        @ParamChecks({
-               @ParamCheck(include = "s", size = {1,3}),
-               @ParamCheck(include = "i", range = {"0","5"})
+               @ParamCheck(size = {1,3}, target = "s"),
+               @ParamCheck(range = {"0","5"}, target = "i")
        })
        public String testValidate(String s, Integer i, @NotVaid HttpSession session) {
            return "success";
@@ -64,6 +69,62 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    http://localhost:8080/test?s=ab&i=100
    ```
 
+
+### Bean Validation
+
+> Only support on version 1.1.0 or later
+
+1. use annotation like this :arrow_down:
+
+    ```java
+    public class TestBean {
+        
+        @Regexp("a.*")
+        @Size({-1,4})
+        @Required
+        private String name;
+    }
+    ```
+
+**Remember that bean's validation would be overridden by method annotations**
+
+2. try a case
+
+   ```java
+   @SpringBootApplication
+   @RestController
+   @RequestMapping("/")
+   public class TestApplication {
+   	
+       //...
+       
+       @GetMapping("/test")
+       @ParamChecks({
+               @ParamCheck(include = "s", size = {1,3}),
+               @ParamCheck(include = "i", range = {"0","5"})
+       })
+       public String testValidate(String s, Integer i, @NotVaid HttpSession session) {
+           return "success";
+       }
+       
+       @GetMapping("/testBean")
+       @ParamCheck(include = "name", regexp = "b.*", target = "bean")
+       public String testBeanValidate(TestBean bean) {
+           return "success";
+       }
+   }
+   ```
+
+   
+
+   **Ex:**
+
+   ```
+   http://localhost:8080/testBean?name=abb
+   http://localhost:8080/testBean?name=bbcccc
+   http://localhost:8080/testBean?name=bcd
+   ```
+
    
 
 ## Advanced
@@ -72,13 +133,26 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 | Name            | args                                                         | Note                                                         |
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ParamCheck      | include, exclude, size, range, split2array ,split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
-| ParamChecks     | values                                                       | with this annotaion, more than two `ParamCheck` can be used  |
-| ArrayParamCheck | target, values                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
+| ParamCheck      | include, size, range, split, regexp, required, target, custom | major annotation. use `custom` to expand validator you want  |
+| ParamChecks     | values, id                                                       | with this annotation, more than two `ParamCheck` can be used  |
+| ArrayParamCheck | target, values, self, id                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
 | NotValid        |                                                              | use to avoid analyzing and checking for argument             |
 | Valid           | value                                                        | for non spring environments. in order to mark argument's name |
 
 > :information_source: not recommend use `ArrayParamCheck` to a large array
+>
+> :warning: If method have more than one argument you must use `target` on `@ParamCheck` unless you just want to validate first argument 
+
+| Name     | Note                                     |
+| -------- | ---------------------------------------- |
+| Required | as `ParamCheck::required` , default true |
+| Regexp   | as `ParamCheck::regexp`                  |
+| Size     | as `ParamCheck::size`                    |
+| Range    | as `ParamCheck::range`                   |
+| Custom   | as `ParamCheck::custom`                  |
+| Split    | as `ParamCheck::split`                   |
+
+
 
 ### Default Validators
 
@@ -87,7 +161,7 @@ we provide lots of validators
 | Name                | Note                                                         |
 | :------------------ | :----------------------------------------------------------- |
 | RequiredValidator   | make sure arg is not `null` or `""`  (if arg is a string)  if `ParamCheck-required` is true |
-| SizeValidatator     | check arg with `ParamCheck-size` when size is not empty and arg is array or string. |
+| SizeValidator     | check arg with `ParamCheck-size` when size is not empty and arg is array or string. |
 | ValueRangeValidator | check arg value with `ParamCheck-ragne`  when range is not empty and arg is number. |
 | RegexpValidator     | make sure arg matches the `ParamCheck-regexp` when regexp is not empty and arg is string |
 
@@ -126,7 +200,13 @@ public interface RuleValidator {
 }
 ```
 
-> we provide `CustomizeUtils` to help slove custom args
+> we provide `CustomizeUtils` to help solve custom args
+
+### Use Cache
+
+If your project imported `SpringCache` then Argmous would use it to cache validation rules.
+
+You can use same  `id`  on `ParamChecks` or `ArrayParamChecks` to reuse method annotations. The default value of id is a md5 hash of method's target class name and method's name.
 
 ## Architecture
 

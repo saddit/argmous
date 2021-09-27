@@ -1,10 +1,13 @@
-package cn.shijh.argmous.factory.arg;
+package cn.shijh.argmous.factory.impl;
 
 import cn.shijh.argmous.annotation.NotValid;
 import cn.shijh.argmous.annotation.Valid;
+import cn.shijh.argmous.exception.ArgumentCreateException;
 import cn.shijh.argmous.factory.ArgumentInfoFactory;
 import cn.shijh.argmous.model.ArgumentInfo;
+import cn.shijh.argmous.model.ValidationRule;
 import cn.shijh.argmous.util.BeanUtils;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.ClassUtils;
 
@@ -14,6 +17,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
 
@@ -23,11 +28,12 @@ public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
         info.setValue(arg);
         info.setType(parameter.getType());
         Valid validName = parameter.getAnnotation(Valid.class);
-        if(validName != null) {
+        if (validName != null) {
             info.setName(validName.value());
         } else {
             info.setName(parameter.getName());
         }
+        info.setBelongTo(info.getName());
         return info;
     }
 
@@ -48,7 +54,8 @@ public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
                     i.setValue(null);
                 }
                 fieldInfo.add(i);
-            } catch (IllegalAccessException ignore) { }
+            } catch (IllegalAccessException ignore) {
+            }
         }
         return fieldInfo;
     }
@@ -68,6 +75,28 @@ public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
             if (BeanUtils.isBean(parameter.getType())) {
                 Collection<ArgumentInfo> fromFields = createFromFields(arg, fromArg.getName(), parameter.getType());
                 argumentInfos.addAll(fromFields);
+            }
+        }
+        return argumentInfos;
+    }
+
+    @Override
+    public Collection<ArgumentInfo> createFromArray(Collection<?> objects, String name) throws ArgumentCreateException {
+        //对数组的每个参数进行检查则必须考虑数组内为对象时对对象属性进行拆分
+        Collection<ArgumentInfo> argumentInfos = new LinkedList<>();
+        if (objects != null) {
+            int count = 0;
+            for (Object o : objects) {
+                if (BeanUtils.isBean(o.getClass())) {
+                    argumentInfos.addAll(createFromFields(o, name, o.getClass()));
+                } else {
+                    ArgumentInfo arg = new ArgumentInfo();
+                    arg.setType(o.getClass());
+                    arg.setValue(o);
+                    arg.setName(name + "[" + (count++) + "]");
+                    arg.setBelongTo(name);
+                    argumentInfos.add(arg);
+                }
             }
         }
         return argumentInfos;

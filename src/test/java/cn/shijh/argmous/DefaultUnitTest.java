@@ -2,12 +2,11 @@ package cn.shijh.argmous;
 
 import cn.shijh.argmous.exception.ParamCheckException;
 import cn.shijh.argmous.factory.ArgmousProxyFactory;
-import cn.shijh.argmous.factory.proxy.JDKProxyFactory;
-import cn.shijh.argmous.manager.validator.impl.DefaultValidatorManager;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @SuppressWarnings("all")
 public class DefaultUnitTest {
@@ -16,7 +15,8 @@ public class DefaultUnitTest {
     @Before
     public void setUp() throws Exception {
         ArgmousProxyFactory jdkProxyFactory = ArgmousProxyFactory.builder().build();
-        targetService = (TargetService) jdkProxyFactory.proxy(new TargetServiceImpl());
+        //targetService = (TargetService) jdkProxyFactory.proxy(new TargetServiceImpl());
+        targetService = (TargetService) jdkProxyFactory.newProxyInstance(TargetServiceImpl.class);
     }
 
     @Test
@@ -35,6 +35,12 @@ public class DefaultUnitTest {
         Integer i = 2;
         try {
             targetService.test1(s1);
+            throw new IllegalStateException("test fail: test1 passed");
+        } catch (ParamCheckException e) {
+            System.out.println("test1 error->" + e.getMessage());
+        }
+        try {
+            targetService.test1("abbbb");
             throw new IllegalStateException("test fail: test1 passed");
         } catch (ParamCheckException e) {
             System.out.println("test1 error->" + e.getMessage());
@@ -76,6 +82,62 @@ public class DefaultUnitTest {
             throw new IllegalStateException("test fail: test3 passed");
         } catch (ParamCheckException e) {
             System.out.println("test3-2 error->" + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNullArray() throws Exception {
+        try {
+            targetService.test3(null);
+            throw new IllegalStateException("test fail: test3 passed");
+        } catch (ParamCheckException e) {
+            System.out.println("test3-1 error->" + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testEmptyArray() throws Exception {
+        try {
+            targetService.test3(Collections.emptyList());
+            throw new IllegalStateException("test fail: test3 passed");
+        } catch (ParamCheckException e) {
+            System.out.println("test3-1 error->" + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testBean() throws Exception {
+        TestBean testBean = new TestBean();
+        testBean.setName("a12");
+        targetService.testBean(testBean);
+        testBean.setName("b12");
+        targetService.testBeanOverride(testBean);
+        try {
+            testBean.setName("ccc");
+            targetService.testBean2(testBean, "a");
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean-3 error->" + p.getMessage());
+        }
+        try {
+            testBean.setName("abc");
+            targetService.testBean2(testBean, "qweqweq");
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean-4 error->" + p.getMessage());
+        }
+    }
+
+    @Test
+    public void testBean3() throws Exception {
+        TestBean testBean = new TestBean();
+        testBean.setName("abb");
+        testBean.setNum(11);
+        try {
+            targetService.test4(testBean);
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBean3 error->" + p.getMessage());
         }
     }
 }

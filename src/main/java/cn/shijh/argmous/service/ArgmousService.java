@@ -9,5 +9,4 @@ import java.util.Collection;
 
 public interface ArgmousService {
     void paramCheck(Collection<ArgumentInfo> argumentInfos, Collection<ValidationRule> rules) throws ParamCheckException;
-    void arrayParamCheck(Collection<ArgumentInfo> argumentInfos, Collection<ValidationRule> rules, String targetName) throws ParamCheckException;
 }
