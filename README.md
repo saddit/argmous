@@ -1,3 +1,6 @@
+
+> version 1.1.0 has a terrible bug, please wait version 1.1.1
+
 # ARGMOUS
 
 Argmous is a light and easy framework to validate arguments on any method because it dependences on spring-aop and just use annotaion to define validation rules.
@@ -69,7 +72,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 ### Bean Validation
 
-> Only support on version 1.1.0
+> Only support on version 1.1.0 or later
 
 1. use annotation like this :arrow_down:
 
