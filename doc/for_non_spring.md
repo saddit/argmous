@@ -9,9 +9,9 @@ this page is a guide for people who want to use Argmous on non spring environmen
    ```xml
    <dependencies>
        <dependency>
-           <groupId>cn.shijh</groupId>
+           <groupId>top.pressed</groupId>
            <artifactId>argmous</artifactId>
-           <version>1.1.1-BETA</version>
+           <version>1.1.2-BETA</version>
        </dependency>
    </dependencies>
    ```

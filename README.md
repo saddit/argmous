@@ -13,14 +13,14 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 ### Method Validation
 
-1. add dependences to your `POM.XML` 
+1. add dependence to your `POM.XML` 
 
    ```xml
    <dependencies>
        <dependency>
-           <groupId>cn.shijh</groupId>
+           <groupId>top.pressed</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.1.1-BETA</version>
+           <version>1.1.2-BETA</version>
        </dependency>
    </dependencies>
    ```
