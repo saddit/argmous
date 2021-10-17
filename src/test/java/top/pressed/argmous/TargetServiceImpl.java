@@ -56,4 +56,14 @@ public class TargetServiceImpl implements TargetService {
         System.out.println(bean);
     }
 
+    @ArrayParamCheck(value = {
+            @ParamCheck(include = "num", range = {"0", "11"}, target = "beanArr"),
+            @ParamCheck(include = "none", range = {"0", "6"}, target = "bean")
+    })
+    @Override
+    public void testBeanArray(@Valid("beanArr") Collection<TestBean> testBeans, @Valid("bean") TestBean b) {
+        System.out.println(testBeans);
+        System.out.println(b);
+    }
+
 }

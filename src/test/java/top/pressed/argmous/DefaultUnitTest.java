@@ -1,9 +1,9 @@
 package top.pressed.argmous;
 
-import top.pressed.argmous.exception.ParamCheckException;
-import top.pressed.argmous.factory.ArgmousProxyFactory;
 import org.junit.Before;
 import org.junit.Test;
+import top.pressed.argmous.exception.ParamCheckException;
+import top.pressed.argmous.factory.ArgmousProxyFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -138,6 +138,31 @@ public class DefaultUnitTest {
             throw new IllegalStateException("test fail: test passed");
         } catch (ParamCheckException p) {
             System.out.println("testBean3 error->" + p.getMessage());
+        }
+    }
+
+    @Test
+    public void testBeanArray() throws Exception {
+        TestBean b1 = new TestBean();
+        b1.setNum(13);
+        TestBean b2 = new TestBean();
+        b2.setNum(10);
+        TestBean b3 = new TestBean();
+        b3.setNone(1);
+        try {
+            targetService.testBeanArray(Arrays.asList(b1, b2), b3);
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBeanArray-1 error->" + p.getMessage());
+        }
+        b1.setNum(10);
+        targetService.testBeanArray(Arrays.asList(b1, b2), b3);
+        try {
+            b3.setNone(10);
+            targetService.testBeanArray(Arrays.asList(b1, b2), b3);
+            throw new IllegalStateException("test fail: test passed");
+        } catch (ParamCheckException p) {
+            System.out.println("testBeanArray-2 error->" + p.getMessage());
         }
     }
 }

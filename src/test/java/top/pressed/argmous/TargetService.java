@@ -18,4 +18,6 @@ public interface TargetService {
     void testBeanOverride(TestBean bean);
 
     void test4(@Valid("bean") TestBean bean);
+
+    void testBeanArray(Collection<TestBean> testBeans, TestBean b);
 }
