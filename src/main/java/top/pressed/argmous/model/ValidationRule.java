@@ -5,8 +5,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ValidationRule {
@@ -42,10 +41,6 @@ public class ValidationRule {
             return null;
         }
         return include.stream().findFirst().orElse("");
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
     }
 
     public static ValidationRule empty() {

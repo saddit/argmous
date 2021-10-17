@@ -1,5 +1,6 @@
 package top.pressed.argmous.factory.impl;
 
+import com.esotericsoftware.reflectasm.FieldAccess;
 import top.pressed.argmous.annotation.ArrayParamCheck;
 import top.pressed.argmous.annotation.IsRule;
 import top.pressed.argmous.annotation.ParamCheck;
@@ -44,7 +45,8 @@ public class DefaultValidationRuleFactory implements ValidationRuleFactory {
 
     @Override
     public Collection<ValidationRule> createFromBean(Class<?> type, String name) {
-        Field[] fields = type.getDeclaredFields();
+        FieldAccess fieldAccess = FieldAccess.get(type);
+        Field[] fields = fieldAccess.getFields();
         Collection<ValidationRule> rules = new ArrayList<>(fields.length);
         AtomicBoolean shouldValid = new AtomicBoolean(false);
         for (Field field : fields) {

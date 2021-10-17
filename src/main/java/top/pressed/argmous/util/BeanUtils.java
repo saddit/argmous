@@ -1,5 +1,7 @@
 package top.pressed.argmous.util;
 
+import com.esotericsoftware.reflectasm.FieldAccess;
+import com.esotericsoftware.reflectasm.MethodAccess;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.ClassUtils;
 
@@ -18,26 +20,48 @@ public class BeanUtils {
                 !Member.class.isAssignableFrom(o);
     }
 
+    /**
+     * exclude toString, equals, hashCode ....
+     *
+     */
+    public boolean isBeanBaseMethod(String methodName) {
+        return Arrays.asList("toString", "equals", "hashCode").contains(methodName);
+    }
+
+    public String getterName(String fieldName) {
+        String fst = fieldName.substring(0, 1);
+        return "get" + fst.toUpperCase() + fieldName.substring(1);
+    }
+
+    public String setterName(String fieldName) {
+        String fst = fieldName.substring(0, 1);
+        return "set" + fst.toUpperCase() + fieldName.substring(1);
+    }
+
     public void copyProperties(Object from, Object to, String... exclude) {
-        Field[] fields = from.getClass().getDeclaredFields();
-        Class<?> toClass = to.getClass();
+        MethodAccess fromMethod = MethodAccess.get(from.getClass());
+        MethodAccess toMethod = MethodAccess.get(to.getClass());
+        FieldAccess fromFieldAccess = FieldAccess.get(from.getClass());
+
         List<String> excludeList = Arrays.stream(exclude).collect(Collectors.toList());
-        for (Field field : fields) {
-            if (excludeList.contains(field.getName())) {
+
+        for (int i = 0; i<fromFieldAccess.getFields().length; i++) {
+            String fromFieldName = fromFieldAccess.getFieldNames()[i];
+            Class<?> fromFieldType = fromFieldAccess.getFieldTypes()[i];
+
+            int toSetterIdx = toMethod.getIndex(setterName(fromFieldName));
+            int toGetterIdx = toMethod.getIndex(getterName(fromFieldName));
+            Class<?> toFieldType = toMethod.getReturnTypes()[toGetterIdx];
+
+            if (excludeList.contains(fromFieldName)) {
                 continue;
             }
-            try {
-                field.setAccessible(true);
-                Object fromValue = field.get(from);
-                Field toField = toClass.getDeclaredField(field.getName());
-                toField.setAccessible(true);
-                if (fromValue.getClass().isArray()) {
-                    AnnotationBeanUtils.arrayResolve(fromValue, toField, to);
-                } else if (toField.getType().isAssignableFrom(field.getType())){
-                    toField.set(to, fromValue);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            Object fromValue = fromMethod.invoke(from, getterName(fromFieldName));
+            if (fromFieldType.isArray()) {
+                AnnotationBeanUtils.arrayResolve(fromValue, fromFieldType, to, toMethod, toSetterIdx, toGetterIdx);
+            } else if (toFieldType.isAssignableFrom(fromFieldType)){
+                toMethod.invoke(to, toSetterIdx, fromValue);
             }
         }
     }

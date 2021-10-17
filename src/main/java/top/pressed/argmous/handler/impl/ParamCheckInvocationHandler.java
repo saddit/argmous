@@ -57,7 +57,7 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
             targetMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
         } catch (NoSuchMethodException ignored) {
         }
-        Collection<ArgumentInfo> argumentInfos = argumentInfoFactory.createFromMethod(targetMethod, args);
+        Collection<ArgumentInfo> argumentInfos = argumentInfoFactory.createFromParameters(targetMethod.getParameters(), args);
         if (!argumentInfos.isEmpty()) {
             AtomicReference<String> defaultTargetName = new AtomicReference<>("");
             ParamCheck single = targetMethod.getAnnotation(ParamCheck.class);
