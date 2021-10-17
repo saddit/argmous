@@ -41,28 +41,37 @@ public class BeanUtils {
     public void copyProperties(Object from, Object to, String... exclude) {
         MethodAccess fromMethod = MethodAccess.get(from.getClass());
         MethodAccess toMethod = MethodAccess.get(to.getClass());
-        FieldAccess fromFieldAccess = FieldAccess.get(from.getClass());
 
         List<String> excludeList = Arrays.stream(exclude).collect(Collectors.toList());
 
-        for (int i = 0; i<fromFieldAccess.getFields().length; i++) {
-            String fromFieldName = fromFieldAccess.getFieldNames()[i];
-            Class<?> fromFieldType = fromFieldAccess.getFieldTypes()[i];
+        for (int i = 0; i< fromMethod.getMethodNames().length; i++) {
+            String toMethodName = fromMethod.getMethodNames()[i];
 
-            int toSetterIdx = toMethod.getIndex(setterName(fromFieldName));
-            int toGetterIdx = toMethod.getIndex(getterName(fromFieldName));
-            Class<?> toFieldType = toMethod.getReturnTypes()[toGetterIdx];
-
-            if (excludeList.contains(fromFieldName)) {
+            if (BeanUtils.isBeanBaseMethod(toMethodName) || !toMethodName.matches("^get\\w+$")) {
                 continue;
             }
 
-            Object fromValue = fromMethod.invoke(from, getterName(fromFieldName));
-            if (fromFieldType.isArray()) {
-                AnnotationBeanUtils.arrayResolve(fromValue, fromFieldType, to, toMethod, toSetterIdx, toGetterIdx);
-            } else if (toFieldType.isAssignableFrom(fromFieldType)){
-                toMethod.invoke(to, toSetterIdx, fromValue);
-            }
+            String fromFieldName = toMethodName.substring(3).toLowerCase();
+            Class<?> fromFieldType = fromMethod.getReturnTypes()[i];
+
+            try {
+                int toSetterIdx = toMethod.getIndex(setterName(fromFieldName));
+                int toGetterIdx = toMethod.getIndex(getterName(fromFieldName));
+                Class<?> toFieldType = toMethod.getReturnTypes()[toGetterIdx];
+
+                if (excludeList.contains(fromFieldName)) {
+                    continue;
+                }
+
+                Object fromValue = fromMethod.invoke(from, getterName(fromFieldName));
+                if (fromFieldType.isArray()) {
+                    AnnotationBeanUtils.arrayResolve(fromValue, fromFieldType, to, toMethod, toSetterIdx, toGetterIdx);
+                } else if (toFieldType.isAssignableFrom(fromFieldType)
+                        || (fromFieldType.isPrimitive()
+                        && ClassUtils.primitiveToWrapper(fromFieldType).equals(toFieldType))) {
+                    toMethod.invoke(to, toSetterIdx, fromValue);
+                }
+            } catch (IllegalArgumentException ignore) {}
         }
     }
 }

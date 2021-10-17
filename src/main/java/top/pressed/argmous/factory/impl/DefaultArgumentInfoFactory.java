@@ -33,12 +33,10 @@ public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
 
     @Override
     public Collection<ArgumentInfo> createFromFields(Object arg, String name, Class<?> argType) {
-        FieldAccess fieldAccess = FieldAccess.get(argType);
         MethodAccess methodAccess = MethodAccess.get(argType);
-
         Collection<ArgumentInfo> fieldInfo = new LinkedList<>();
 
-        for (Field field : fieldAccess.getFields()) {
+        for (Field field : argType.getDeclaredFields()) {
             int getterIdx = methodAccess.getIndex(BeanUtils.getterName(field.getName()));
             ArgumentInfo i = new ArgumentInfo();
             i.setName(field.getName());
