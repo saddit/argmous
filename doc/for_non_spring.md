@@ -4,14 +4,14 @@ this page is a guide for people who want to use Argmous on non spring environmen
 
 ## Quick Start
 
-1. add dependences to your `POM.XML` 
+1. add dependencies to your `POM.XML`
 
    ```xml
    <dependencies>
        <dependency>
            <groupId>top.pressed</groupId>
            <artifactId>argmous</artifactId>
-           <version>1.1.2-BETA</version>
+           <version>1.1.3-BETA</version>
        </dependency>
    </dependencies>
    ```
@@ -19,8 +19,9 @@ this page is a guide for people who want to use Argmous on non spring environmen
 2. create an instance of `ArgmousProxyFactory`. the default implementation class is `JDKProxyFactory`.
 
    ```java
+   import top.pressed.argmous.ArgmousInitializr;    
    public class Solution {
-       private ArgmousProxyFactory proxyFactory = ArgmousProxyFactory.builder().build(); 
+       private ArgmousProxyFactory proxyFactory = ArgmousInitializr.getProxyFactory(); 
    }
    ```
 
@@ -28,7 +29,7 @@ this page is a guide for people who want to use Argmous on non spring environmen
 
    ```java
    public class Solution {
-       private ArgmousProxyFactory proxyFactory = ArgmousProxyFactory.builder().build();
+       private ArgmousProxyFactory proxyFactory = ArgmousInitializr.getProxyFactory();
        private TestService testService = (TestService) proxyFactory.proxy(new TestServiceImpl());
    }
    ```
@@ -40,10 +41,21 @@ this page is a guide for people who want to use Argmous on non spring environmen
 if you want to add your custom validators you can init them when build ArgmousProxyFactory
 
 ```java
+import top.pressed.argmous.ArgmousInitializr;
+
 public class Solution {
-    private ArgmousProxyFactory proxyFactory = ArgmousProxyFactory.builder()
-        .addValidator(new MyCustomValidator())
-        .build(); 
+   public Solution() {
+      ArgmousInitializr.addValidators(new CustomValidator());
+   }
 }
 ```
+
+## ArgmousInitializr
+
+`ArgmousInitializr` is the entry of argmous. You can use `initBean` and `finishInit` to custom all components of argmous
+most of the time using `defaultInit` and `addValidators` is enough.
+
+if `initBean` has been invoked, ensure `finishBean` invoked after that and all components should init by yourself
+include `ArgumentInfoFactory`, `ValidationRuleFactory`, `ValidationManager`, `ValidatorManager`, `ArgmousService`,
+`RuleMixHandler` and `ArgmousProxyFactory`
 

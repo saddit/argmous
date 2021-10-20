@@ -1,7 +1,7 @@
 package top.pressed.argmous.factory.impl;
 
-import com.esotericsoftware.reflectasm.FieldAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
+import top.pressed.argmous.StandardInitBean;
 import top.pressed.argmous.annotation.NotValid;
 import top.pressed.argmous.annotation.Valid;
 import top.pressed.argmous.exception.ArgumentCreateException;
@@ -10,11 +10,11 @@ import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.util.BeanUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
-public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
+public class DefaultArgumentInfoFactory implements ArgumentInfoFactory, StandardInitBean {
 
     @Override
     public ArgumentInfo createFromArg(Object arg, Parameter parameter) {

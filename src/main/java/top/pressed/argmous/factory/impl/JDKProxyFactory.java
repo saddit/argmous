@@ -1,34 +1,27 @@
 package top.pressed.argmous.factory.impl;
 
-import top.pressed.argmous.factory.ArgmousProxyFactory;
-import top.pressed.argmous.factory.ArgumentInfoFactory;
-import top.pressed.argmous.factory.ValidationRuleFactory;
-import top.pressed.argmous.handler.impl.ParamCheckInvocationHandler;
-import top.pressed.argmous.service.ArgmousService;
-import top.pressed.argmous.service.impl.ArgmousServiceImpl;
 import lombok.AllArgsConstructor;
+import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.factory.ArgmousProxyFactory;
+import top.pressed.argmous.handler.impl.ParamCheckInvocationHandler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.rmi.NoSuchObjectException;
 
 @AllArgsConstructor
-public class JDKProxyFactory implements ArgmousProxyFactory {
-    private final ValidationRuleFactory validationRuleFactory;
-    private final ArgumentInfoFactory argumentInfoFactory;
-    private final ArgmousService argmousService;
-
-    public JDKProxyFactory() {
-        validationRuleFactory = new DefaultValidationRuleFactory();
-        argumentInfoFactory = new DefaultArgumentInfoFactory();
-        argmousService = new ArgmousServiceImpl();
-    }
+public class JDKProxyFactory implements ArgmousProxyFactory, StandardInitBean {
 
     @Override
     public Object proxy(Object target) {
         Class<?> clazz = target.getClass();
-        return Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(),
-                new ParamCheckInvocationHandler(validationRuleFactory,argumentInfoFactory, argmousService, target));
+        try {
+            return Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(),
+                    new ParamCheckInvocationHandler(target));
+        } catch (NoSuchObjectException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
