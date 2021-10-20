@@ -1,5 +1,6 @@
 package top.pressed.argmous.factory.impl;
 
+import top.pressed.argmous.StandardInitBean;
 import top.pressed.argmous.annotation.ArrayParamCheck;
 import top.pressed.argmous.annotation.IsRule;
 import top.pressed.argmous.annotation.ParamCheck;
@@ -14,14 +15,14 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class DefaultValidationRuleFactory implements ValidationRuleFactory {
+public class DefaultValidationRuleFactory implements ValidationRuleFactory, StandardInitBean {
     @Override
     public Collection<ValidationRule> createFromAnnotations(ParamCheck[] paramChecks, String defaultTargetName) {
         return Arrays.stream(paramChecks)
-                .map(i->this.createFromAnnotation(i, defaultTargetName))
+                .map(i -> this.createFromAnnotation(i, defaultTargetName))
                 .collect(Collectors.toList());
     }
-    
+
     @Override
     public ValidationRule createFromAnnotation(ParamCheck paramCheck, String defaultTargetName) {
         ValidationRule validationRule = new ValidationRule();

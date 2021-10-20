@@ -1,6 +1,5 @@
 package top.pressed.argmous.factory;
 
-import top.pressed.argmous.builder.ArgmousProxyFactoryBuilder;
 
 public interface ArgmousProxyFactory {
     Object proxy(Object targetType);
@@ -11,8 +10,4 @@ public interface ArgmousProxyFactory {
      * @return the instance of proxy
      */
     Object newProxyInstance(Class<?> instanceClass);
-
-    static ArgmousProxyFactoryBuilder builder() {
-        return new ArgmousProxyFactoryBuilder();
-    }
 }

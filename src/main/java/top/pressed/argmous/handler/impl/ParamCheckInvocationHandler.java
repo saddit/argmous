@@ -6,19 +6,20 @@ import top.pressed.argmous.annotation.ParamChecks;
 import top.pressed.argmous.exception.ParamCheckException;
 import top.pressed.argmous.factory.ArgumentInfoFactory;
 import top.pressed.argmous.factory.ValidationRuleFactory;
-import top.pressed.argmous.factory.impl.DefaultArgumentInfoFactory;
-import top.pressed.argmous.factory.impl.DefaultValidationRuleFactory;
 import top.pressed.argmous.handler.RuleMixHandler;
+import top.pressed.argmous.manager.pool.InstancePoolManager;
 import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.model.ValidationRule;
 import top.pressed.argmous.service.ArgmousService;
-import top.pressed.argmous.service.impl.ArgmousServiceImpl;
 import top.pressed.argmous.util.BeanUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.rmi.NoSuchObjectException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -26,20 +27,14 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
     private final ValidationRuleFactory validationRuleFactory;
     private final ArgumentInfoFactory argumentInfoFactory;
     private final ArgmousService argmousService;
-    private RuleMixHandler ruleMixHandler = new MethodToBeanRuleMixHandler();
+    private RuleMixHandler ruleMixHandler;
     private final Object target;
 
-    public ParamCheckInvocationHandler(Object target) {
-        this.validationRuleFactory = new DefaultValidationRuleFactory();
-        this.argumentInfoFactory = new DefaultArgumentInfoFactory();
-        this.argmousService = new ArgmousServiceImpl();
-        this.target = target;
-    }
-
-    public ParamCheckInvocationHandler(ValidationRuleFactory validationRuleFactory, ArgumentInfoFactory argumentInfoFactory, ArgmousService argmousService, Object target) {
-        this.validationRuleFactory = validationRuleFactory;
-        this.argumentInfoFactory = argumentInfoFactory;
-        this.argmousService = argmousService;
+    public ParamCheckInvocationHandler(Object target) throws NoSuchObjectException {
+        this.validationRuleFactory = InstancePoolManager.i().getInstance(ValidationRuleFactory.class);
+        this.argumentInfoFactory = InstancePoolManager.i().getInstance(ArgumentInfoFactory.class);
+        this.argmousService = InstancePoolManager.i().getInstance(ArgmousService.class);
+        this.ruleMixHandler = InstancePoolManager.i().getInstance(RuleMixHandler.class);
         this.target = target;
     }
 
@@ -57,7 +52,7 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
             targetMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
         } catch (NoSuchMethodException ignored) {
         }
-        Collection<ArgumentInfo> argumentInfos = argumentInfoFactory.createFromMethod(targetMethod, args);
+        Collection<ArgumentInfo> argumentInfos = argumentInfoFactory.createFromParameters(targetMethod.getParameters(), args);
         if (!argumentInfos.isEmpty()) {
             AtomicReference<String> defaultTargetName = new AtomicReference<>("");
             ParamCheck single = targetMethod.getAnnotation(ParamCheck.class);
@@ -91,7 +86,7 @@ public class ParamCheckInvocationHandler implements InvocationHandler {
                         validationRuleFactory.createFromAnnotation(array, defaultTargetName.get())
                 );
                 //add element's class rules
-                argumentInfos.stream().findFirst()
+                arrayArgInfos.stream().findFirst()
                         .ifPresent(arg -> {
                             if (BeanUtils.isBean(arg.getType())) {
                                 validationRules.addAll(validationRuleFactory.createFromBean(arg.getType(), defaultTargetName.get()));

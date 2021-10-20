@@ -20,7 +20,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        <dependency>
            <groupId>top.pressed</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.1.2-BETA</version>
+           <version>1.1.3-BETA</version>
        </dependency>
    </dependencies>
    ```

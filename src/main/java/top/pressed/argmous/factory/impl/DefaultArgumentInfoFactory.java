@@ -1,5 +1,7 @@
 package top.pressed.argmous.factory.impl;
 
+import com.esotericsoftware.reflectasm.MethodAccess;
+import top.pressed.argmous.StandardInitBean;
 import top.pressed.argmous.annotation.NotValid;
 import top.pressed.argmous.annotation.Valid;
 import top.pressed.argmous.exception.ArgumentCreateException;
@@ -8,11 +10,11 @@ import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.util.BeanUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
-public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
+public class DefaultArgumentInfoFactory implements ArgumentInfoFactory, StandardInitBean {
 
     @Override
     public ArgumentInfo createFromArg(Object arg, Parameter parameter) {
@@ -31,31 +33,28 @@ public class DefaultArgumentInfoFactory implements ArgumentInfoFactory {
 
     @Override
     public Collection<ArgumentInfo> createFromFields(Object arg, String name, Class<?> argType) {
-        Field[] declaredFields = argType.getDeclaredFields();
+        MethodAccess methodAccess = MethodAccess.get(argType);
         Collection<ArgumentInfo> fieldInfo = new LinkedList<>();
-        for (Field field : declaredFields) {
+
+        for (Field field : argType.getDeclaredFields()) {
+            int getterIdx = methodAccess.getIndex(BeanUtils.getterName(field.getName()));
             ArgumentInfo i = new ArgumentInfo();
             i.setName(field.getName());
             i.setBelongTo(name);
-            i.setType(field.getType());
-            try {
-                if (arg != null) {
-                    field.setAccessible(true);
-                    i.setValue(field.get(arg));
-                } else {
-                    i.setValue(null);
-                }
-                fieldInfo.add(i);
-            } catch (IllegalAccessException ignore) {
+            i.setType(methodAccess.getReturnTypes()[getterIdx]);
+            if (arg != null) {
+                i.setValue(methodAccess.invoke(arg, getterIdx));
+            } else {
+                i.setValue(null);
             }
+            fieldInfo.add(i);
         }
+
         return fieldInfo;
     }
 
-    @Override
-    public Collection<ArgumentInfo> createFromMethod(Method method, Object[] args) {
+    public Collection<ArgumentInfo> createFromParameters(Parameter[] parameters, Object[] args) {
         Collection<ArgumentInfo> argumentInfos = new LinkedList<>();
-        Parameter[] parameters = method.getParameters();
         for (int i = 0; i < args.length; i++) {
             Parameter parameter = parameters[i];
             if (parameter.getAnnotation(NotValid.class) != null) {

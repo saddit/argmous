@@ -1,15 +1,17 @@
 package top.pressed.argmous.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValidationRule {
+public class ValidationRule implements Cloneable, Serializable {
     private String regexp;
 
     private String split;
@@ -44,10 +46,6 @@ public class ValidationRule {
         return include.stream().findFirst().orElse("");
     }
 
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
     public static ValidationRule empty() {
         return new ValidationRule("", "",
                 new ArrayList<>(),
@@ -56,5 +54,14 @@ public class ValidationRule {
                 "",
                 new ArrayList<>(),
                 new ArrayList<>());
+    }
+
+    @Override
+    public ValidationRule clone() {
+        try {
+            return (ValidationRule) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

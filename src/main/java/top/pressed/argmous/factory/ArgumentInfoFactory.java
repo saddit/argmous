@@ -13,7 +13,7 @@ public interface ArgumentInfoFactory {
 
     Collection<ArgumentInfo> createFromFields(Object arg, String name, Class<?> clazz) throws ArgumentCreateException;
 
-    Collection<ArgumentInfo> createFromMethod(Method method, Object[] args) throws ArgumentCreateException;
+    Collection<ArgumentInfo> createFromParameters(Parameter[] method, Object[] args) throws ArgumentCreateException;
 
     Collection<ArgumentInfo> createFromArray(Collection<?> objects, String name) throws ArgumentCreateException;
 }
