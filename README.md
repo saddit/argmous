@@ -1,5 +1,5 @@
 
-> please use version 1.1.1 or later ❗❗❗❗
+> this project is developing please use lastest version
 
 # ARGMOUS
 
