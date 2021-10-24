@@ -100,8 +100,8 @@ Argmous is a light and easy framework to validate arguments on any method becaus
        
        @GetMapping("/test")
        @ParamChecks({
-               @ParamCheck(include = "s", size = {1,3}),
-               @ParamCheck(include = "i", range = {"0","5"})
+               @ParamCheck(target = "s", size = {1,3}),
+               @ParamCheck(target = "i", range = {"0","5"})
        })
        public String testValidate(String s, Integer i, @NotVaid HttpSession session) {
            return "success";
