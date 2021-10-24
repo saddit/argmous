@@ -138,7 +138,7 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 | ArrayParamCheck | target, values, self, id                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
 | NotValid        |                                                              | use to avoid analyzing and checking for argument             |
 | Valid           | value                                                        | for non spring environments. in order to mark argument's name |
-
+Cancel changes
 > :information_source: not recommend use `ArrayParamCheck` to a large array
 >
 > :warning: If method have more than one argument you must use `target` on `@ParamCheck` unless you just want to validate first argument 
@@ -207,7 +207,3 @@ public interface RuleValidator {
 If your project imported `SpringCache` then Argmous would use it to cache validation rules.
 
 You can use same  `id`  on `ParamChecks` or `ArrayParamChecks` to reuse method annotations. The default value of id is a md5 hash of method's target class name and method's name.
-
-## Architecture
-
-![Architecture](https://cdn.jsdelivr.net/gh/838239178/PicgoBed@main/img/%E6%9C%AA%E5%91%BD%E5%90%8D%E6%96%87%E4%BB%B6%20(1).jpg)
