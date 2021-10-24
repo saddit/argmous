@@ -207,3 +207,7 @@ public interface RuleValidator {
 If your project imported `SpringCache` then Argmous would use it to cache validation rules.
 
 You can use same  `id`  on `ParamChecks` or `ArrayParamChecks` to reuse method annotations. The default value of id is a md5 hash of method's target class name and method's name.
+
+### ActivityDiagram
+
+![activity_diagram](https://cdn.jsdelivr.net/gh/838239178/PicgoBed@main/img/ActivityDiagram.svg)
