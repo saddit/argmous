@@ -216,4 +216,5 @@ You can use same  `id`  on `ParamChecks` or `ArrayParamChecks` to reuse method a
 
 ### Class Diagram (Feature)
 
-![类图](E:\software\oneDriver\OneDrive\桌面\类图.bmp)
+![类图](https://cdn.jsdelivr.net/gh/838239178/PicgoBed/img/类图.bmp)
+
