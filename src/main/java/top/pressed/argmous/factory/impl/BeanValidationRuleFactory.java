@@ -21,6 +21,34 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
 
     private RuleAnnotationProcessor annotationProcessor;
 
+    public Collection<ValidationRule> createFromBean(Class<?> type, String name) {
+        Field[] fields = type.getDeclaredFields();
+        boolean shouldValid = false;
+        Collection<ValidationRule> rules = new ArrayList<>(fields.length);
+        for (Field field : fields) {
+            ValidationRule rule = ValidationRule.empty();
+            rule.setTarget(name);
+            rule.addInclude(field.getName());
+            for (Annotation annotation : field.getDeclaredAnnotations()) {
+                if (annotationProcessor.processBeanAnnotation(annotation, rule)) {
+                    shouldValid = true;
+                }
+            }
+            if (shouldValid) {
+                rules.add(rule);
+            }
+        }
+        return rules;
+    }
+
+    protected void onCreate(Class<?> type, Collection<ValidationRule> rules) {
+
+    }
+
+    protected boolean preCreate(Class<?> type, Collection<ValidationRule> rules) {
+        return true;
+    }
+
     @Override
     public Collection<ValidationRule> create(Method method, String[] argNames, boolean ignoreArray) throws RuleCreateException {
         Parameter[] parameters = method.getParameters();
@@ -28,22 +56,11 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             Class<?> type = parameter.getType();
-            if (BeanUtils.isBean(type)) {
-                String name = argNames[i];
-                Field[] fields = type.getDeclaredFields();
-                boolean shouldValid = false;
-                for (Field field : fields) {
-                    ValidationRule rule = ValidationRule.empty();
-                    rule.setTarget(name);
-                    rule.addInclude(field.getName());
-                    for (Annotation annotation : field.getDeclaredAnnotations()) {
-                        if (annotationProcessor.processBeanAnnotation(annotation, rule)) {
-                            shouldValid = true;
-                        }
-                    }
-                    if (shouldValid) {
-                        rules.add(rule);
-                    }
+            if (preCreate(type, rules)) {
+                if (BeanUtils.isBean(type)) {
+                    Collection<ValidationRule> fromBean = createFromBean(type, argNames[i]);
+                    rules.addAll(fromBean);
+                    onCreate(type, fromBean);
                 }
             }
         }
