@@ -36,7 +36,7 @@ public class DefaultValidationManager extends AbstractValidationManager implemen
     public void afterInitialize() throws StandardInitException {
         try {
             if (validatorManager == null) {
-                this.validatorManager = InstancePoolManager.i().getInstance(ValidatorManager.class);
+                this.validatorManager = InstancePoolManager.instance().getInstance(ValidatorManager.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

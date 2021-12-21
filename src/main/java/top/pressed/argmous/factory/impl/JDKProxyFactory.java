@@ -3,7 +3,7 @@ package top.pressed.argmous.factory.impl;
 import lombok.AllArgsConstructor;
 import top.pressed.argmous.StandardInitBean;
 import top.pressed.argmous.factory.ArgmousProxyFactory;
-import top.pressed.argmous.handler.impl.ParamCheckInvocationHandler;
+import top.pressed.argmous.handler.impl.ParamCheckProxyHandler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +18,7 @@ public class JDKProxyFactory implements ArgmousProxyFactory, StandardInitBean {
         Class<?> clazz = target.getClass();
         try {
             return Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(),
-                    new ParamCheckInvocationHandler(target));
+                    new ParamCheckProxyHandler(target));
         } catch (NoSuchObjectException e) {
             throw new IllegalStateException(e);
         }
