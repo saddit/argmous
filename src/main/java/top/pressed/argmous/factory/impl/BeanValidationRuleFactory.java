@@ -56,8 +56,8 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             Class<?> type = parameter.getType();
-            if (preCreate(type, rules)) {
-                if (BeanUtils.isBean(type)) {
+            if (BeanUtils.isBean(type)) {
+                if (preCreate(type, rules)) {
                     Collection<ValidationRule> fromBean = createFromBean(type, argNames[i]);
                     rules.addAll(fromBean);
                     onCreate(type, fromBean);
