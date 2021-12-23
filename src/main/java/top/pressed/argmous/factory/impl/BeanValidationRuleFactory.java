@@ -16,6 +16,7 @@ import java.lang.reflect.Parameter;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 public class BeanValidationRuleFactory implements ValidationRuleFactory, StandardInitBean {
 
@@ -65,9 +66,26 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
             } else if (!ignoreArray) {
                 Object value = values[i];
                 if (value instanceof Collection) {
-
+                    Optional<?> first = ((Collection<?>) value).stream().findFirst();
+                    if (first.isPresent()) {
+                        Class<?> elemClass = first.get().getClass();
+                        if (BeanUtils.isBean(elemClass)) {
+                            if (preCreate(elemClass, rules)) {
+                                Collection<ValidationRule> fromBean = createFromBean(elemClass, argNames[i]);
+                                rules.addAll(fromBean);
+                                onCreate(elemClass, fromBean);
+                            }
+                        }
+                    }
                 } else if (value != null && type.isArray()) {
-
+                    Class<?> elemClass = type.getComponentType();
+                    if (BeanUtils.isBean(elemClass)) {
+                        if (preCreate(elemClass, rules)) {
+                            Collection<ValidationRule> fromBean = createFromBean(elemClass, argNames[i]);
+                            rules.addAll(fromBean);
+                            onCreate(elemClass, fromBean);
+                        }
+                    }
                 }
             }
         }
