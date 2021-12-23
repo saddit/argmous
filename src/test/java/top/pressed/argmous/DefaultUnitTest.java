@@ -16,7 +16,7 @@ public class DefaultUnitTest {
     @Before
     public void setUp() throws Exception {
         ArgmousInitializr.defaultInit();
-        ArgmousProxyFactory jdkProxyFactory = InstancePoolManager.i().getInstance(ArgmousProxyFactory.class);
+        ArgmousProxyFactory jdkProxyFactory = InstancePoolManager.instance().getInstance(ArgmousProxyFactory.class);
         //targetService = (TargetService) jdkProxyFactory.proxy(new TargetServiceImpl());
         targetService = (TargetService) jdkProxyFactory.newProxyInstance(TargetServiceImpl.class);
     }

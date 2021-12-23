@@ -2,10 +2,11 @@ package top.pressed.argmous;
 
 import lombok.experimental.UtilityClass;
 import top.pressed.argmous.factory.ArgmousProxyFactory;
-import top.pressed.argmous.factory.impl.DefaultArgumentInfoFactory;
-import top.pressed.argmous.factory.impl.DefaultValidationRuleFactory;
+import top.pressed.argmous.factory.impl.CompositeRuleFactory;
 import top.pressed.argmous.factory.impl.JDKProxyFactory;
-import top.pressed.argmous.handler.impl.MethodToBeanRuleMixHandler;
+import top.pressed.argmous.factory.impl.SimpleArgumentInfoFactory;
+import top.pressed.argmous.handler.RuleAnnotationProcessor;
+import top.pressed.argmous.handler.impl.TopologyMixingHandler;
 import top.pressed.argmous.manager.pool.InstancePoolManager;
 import top.pressed.argmous.manager.validation.impl.DefaultValidationManager;
 import top.pressed.argmous.manager.validator.ValidatorInject;
@@ -26,7 +27,7 @@ public class ArgmousInitializr {
             defaultInit();
         }
         try {
-            ValidatorInject vm = InstancePoolManager.i().getInstance(ValidatorInject.class);
+            ValidatorInject vm = InstancePoolManager.instance().getInstance(ValidatorInject.class);
             if (vm != null) {
                 vm.addValidators(Arrays.asList(validators));
             }
@@ -40,7 +41,7 @@ public class ArgmousInitializr {
             defaultInit();
         }
         try {
-            ValidatorInject vm = InstancePoolManager.i().getInstance(ValidatorInject.class);
+            ValidatorInject vm = InstancePoolManager.instance().getInstance(ValidatorInject.class);
             if (vm != null) {
                 vm.addValidators(validators);
             }
@@ -50,25 +51,26 @@ public class ArgmousInitializr {
     }
 
     public void initBean(Object bean) {
-        InstancePoolManager.i().setInstance(bean);
+        InstancePoolManager.instance().setInstance(bean);
         isInit = true;
     }
 
     public void finishInit() {
-        ((StandardInitBean) InstancePoolManager.i()).afterInitialize();
+        ((StandardInitBean) InstancePoolManager.instance()).afterInitialize();
     }
 
     public void defaultInit() {
-        InstancePoolManager pm = InstancePoolManager.i();
-        pm.setInstance(new DefaultValidationRuleFactory());
-        pm.setInstance(new DefaultArgumentInfoFactory());
+        InstancePoolManager pm = InstancePoolManager.instance();
+        pm.setInstance(new RuleAnnotationProcessor());
+        pm.setInstance(new CompositeRuleFactory());
+        pm.setInstance(new SimpleArgumentInfoFactory());
         pm.setInstance(new DefaultValidatorManager());
         //required validator
         pm.setInstance(new DefaultValidationManager());
         //required validation and validator
         pm.setInstance(new ArgmousServiceImpl());
         //required by proxyHandler
-        pm.setInstance(new MethodToBeanRuleMixHandler());
+        pm.setInstance(new TopologyMixingHandler());
         pm.setInstance(new JDKProxyFactory());
         isInit = true;
         finishInit();
@@ -79,7 +81,7 @@ public class ArgmousInitializr {
             defaultInit();
         }
         try {
-            return InstancePoolManager.i().getInstance(ArgmousProxyFactory.class);
+            return InstancePoolManager.instance().getInstance(ArgmousProxyFactory.class);
         } catch (NoSuchObjectException e) {
             throw new IllegalStateException(e);
         }

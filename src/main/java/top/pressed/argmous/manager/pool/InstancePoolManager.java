@@ -13,7 +13,7 @@ public interface InstancePoolManager {
         private static InstancePoolManager DEFAULT = null;
     }
 
-    static InstancePoolManager i() {
+    static InstancePoolManager instance() {
         if (InstanceHolder.DEFAULT == null) {
             InstanceHolder.DEFAULT = new ConcurrentMapPool();
         }

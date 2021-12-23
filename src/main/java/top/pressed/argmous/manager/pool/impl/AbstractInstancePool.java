@@ -7,7 +7,7 @@ import java.rmi.NoSuchObjectException;
 
 public abstract class AbstractInstancePool implements InstancePoolManager, StandardInitBean {
 
-    public abstract void addToPool(Object o, Class<?> type);
+    protected abstract void addToPool(Object o, Class<?> type);
 
     public abstract Object getFromPool(Class<?> type);
 
@@ -16,7 +16,7 @@ public abstract class AbstractInstancePool implements InstancePoolManager, Stand
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getInstance(Class<T> type) throws NoSuchObjectException {
+    public synchronized <T> T getInstance(Class<T> type) throws NoSuchObjectException {
         T res = (T) getFromPool(type);
         if (res != null) {
             return res;
@@ -28,7 +28,7 @@ public abstract class AbstractInstancePool implements InstancePoolManager, Stand
     @Override
     public void setInstance(Object instance) throws IllegalArgumentException {
         if (instance == null) {
-            throw new IllegalArgumentException("instance of can't be null");
+            throw new IllegalArgumentException("instance can't be null");
         }
         Class<?> insClass = instance.getClass();
         addToPool(instance, insClass);
@@ -36,10 +36,11 @@ public abstract class AbstractInstancePool implements InstancePoolManager, Stand
             addToPool(instance, i);
         }
         Class<?> superClass = insClass.getSuperclass();
-        while (!superClass.equals(Object.class)) {
+        while (superClass != null && !superClass.equals(Object.class)) {
             for (Class<?> i : superClass.getInterfaces()) {
                 addToPool(instance, i);
             }
+            addToPool(instance, superClass);
             superClass = superClass.getSuperclass();
         }
         afterSet();
