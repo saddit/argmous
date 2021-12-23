@@ -3,6 +3,8 @@
 
 # ARGMOUS
 
+[![](https://jitpack.io/v/top.pressed/argmous.svg)](https://jitpack.io/#top.pressed/argmous)
+
 Argmous is a light and easy framework to validate arguments on any method because it dependences on spring-aop and just use annotaion to define validation rules.
 
 :book:[Go to argmous-spring-boot-starter project](https://github.com/838239178/argmous-spring-boot-starter)
@@ -16,11 +18,17 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 1. add dependence to your `POM.XML` 
 
    ```xml
+   <repositories>
+       <repository>
+           <id>jitpack.io</id>
+           <url>https://jitpack.io</url>
+       </repository>
+   </repositories>
    <dependencies>
        <dependency>
            <groupId>top.pressed</groupId>
            <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>1.1.3-BETA</version>
+           <version>{See release for newest}</version></version>
        </dependency>
    </dependencies>
    ```
@@ -205,8 +213,6 @@ public interface RuleValidator {
 ### Use Cache
 
 If your project imported `SpringCache` then Argmous would use it to cache validation rules.
-
-You can use same  `id`  on `ParamChecks` or `ArrayParamChecks` to reuse method annotations. The default value of id is a md5 hash of method's target class name and method's name.
 
 ## Designed Architecture
 
