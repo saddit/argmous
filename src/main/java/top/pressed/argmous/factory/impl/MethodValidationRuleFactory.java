@@ -27,7 +27,7 @@ public class MethodValidationRuleFactory implements ValidationRuleFactory, Stand
             supportAnnotations = Arrays.asList(ParamCheck.class, ParamChecks.class, ArrayParamCheck.class);
 
     @Override
-    public Collection<ValidationRule> create(Method method, String[] argNames, boolean ignoreArray) throws RuleCreateException {
+    public Collection<ValidationRule> create(Method method, Object[] values, String[] argNames, boolean ignoreArray) throws RuleCreateException {
         Annotation annotation;
         for (Class<? extends Annotation> aClass : supportAnnotations) {
             annotation = method.getAnnotation(aClass);
