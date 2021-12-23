@@ -22,6 +22,8 @@ import java.util.Collections;
 @OverrideTo(BeanValidationRuleFactory.class)
 public class MethodValidationRuleFactory implements ValidationRuleFactory, StandardInitBean {
 
+    public static String ARRAY_SELF_RULE = "ARGMOUS.isSelfRule";
+
     private RuleAnnotationProcessor annotationProcessor;
     private final Collection<Class<? extends Annotation>>
             supportAnnotations = Arrays.asList(ParamCheck.class, ParamChecks.class, ArrayParamCheck.class);
@@ -36,6 +38,9 @@ public class MethodValidationRuleFactory implements ValidationRuleFactory, Stand
                 rules.forEach(r -> {
                     if (r.getTarget().isEmpty()) {
                         r.setTarget(argNames[0]);
+                    }
+                    if (r.getCustom().contains(ARRAY_SELF_RULE)) {
+                        r.addInclude(argNames[0]);
                     }
                 });
                 return rules;

@@ -4,6 +4,7 @@ import top.pressed.argmous.annotation.ArrayParamCheck;
 import top.pressed.argmous.annotation.IsRule;
 import top.pressed.argmous.annotation.ParamCheck;
 import top.pressed.argmous.annotation.ParamChecks;
+import top.pressed.argmous.factory.impl.MethodValidationRuleFactory;
 import top.pressed.argmous.model.ValidationRule;
 import top.pressed.argmous.util.AnnotationBeanUtils;
 
@@ -25,6 +26,7 @@ public class RuleAnnotationProcessor {
                 .map(this::processParamCheck)
                 .collect(Collectors.toList());
         ValidationRule selfRule = processParamCheck(arrayParamCheck.self());
+        selfRule.getCustom().add(MethodValidationRuleFactory.ARRAY_SELF_RULE);
         fromAnnotations.add(selfRule);
         return fromAnnotations;
     }
@@ -47,7 +49,7 @@ public class RuleAnnotationProcessor {
     }
 
     public boolean processBeanAnnotation(Annotation annotation, ValidationRule rule) {
-        IsRule ir = annotation.getClass().getAnnotation(IsRule.class);
+        IsRule ir = annotation.annotationType().getDeclaredAnnotation(IsRule.class);
         if (ir != null) {
             if (rule == null) {
                 rule = ValidationRule.empty();
