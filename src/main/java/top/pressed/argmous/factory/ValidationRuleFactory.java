@@ -15,5 +15,5 @@ public interface ValidationRuleFactory {
      * @return rules
      * @throws RuleCreateException if something wrong
      */
-    Collection<ValidationRule> create(@NonNull Method method, @NonNull String[] argNames, boolean ignoreArray) throws RuleCreateException;
+    Collection<ValidationRule> create(@NonNull Method method, Object[] values, @NonNull String[] argNames, boolean ignoreArray) throws RuleCreateException;
 }

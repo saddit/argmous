@@ -25,11 +25,11 @@ public class CompositeRuleFactory implements ValidationRuleFactory, StandardInit
     private RuleMixHandler ruleMixHandler;
 
     @Override
-    public Collection<ValidationRule> create(Method method, String[] argNames, boolean ignoreArray) throws RuleCreateException {
+    public Collection<ValidationRule> create(Method method, Object[] values, String[] argNames, boolean ignoreArray) throws RuleCreateException {
         Map<Class<? extends ValidationRuleFactory>, Collection<ValidationRule>> dataMap = new HashMap<>(factories.size());
 
         for (ValidationRuleFactory factory : factories) {
-            Collection<ValidationRule> rules = factory.create(method, argNames, ignoreArray);
+            Collection<ValidationRule> rules = factory.create(method, values, argNames, ignoreArray);
             dataMap.put(factory.getClass(), rules);
         }
 

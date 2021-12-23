@@ -50,7 +50,7 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
     }
 
     @Override
-    public Collection<ValidationRule> create(Method method, String[] argNames, boolean ignoreArray) throws RuleCreateException {
+    public Collection<ValidationRule> create(Method method, Object[] values, String[] argNames, boolean ignoreArray) throws RuleCreateException {
         Parameter[] parameters = method.getParameters();
         Collection<ValidationRule> rules = new ArrayList<>();
         for (int i = 0; i < parameters.length; i++) {
@@ -61,6 +61,13 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
                     Collection<ValidationRule> fromBean = createFromBean(type, argNames[i]);
                     rules.addAll(fromBean);
                     onCreate(type, fromBean);
+                }
+            } else if (!ignoreArray) {
+                Object value = values[i];
+                if (value instanceof Collection) {
+
+                } else if (value != null && type.isArray()) {
+
                 }
             }
         }

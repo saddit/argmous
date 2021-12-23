@@ -29,7 +29,7 @@ public class ArgmousServiceImpl implements ArgmousService, StandardInitBean {
     @Override
     public void startValidate(Method method, Object[] values, String[] names) throws ParamCheckException {
         boolean ignoreArray = method.getAnnotation(ArrayParamCheck.class) == null;
-        Collection<ValidationRule> rules = ruleFactory.create(method, names, ignoreArray);
+        Collection<ValidationRule> rules = ruleFactory.create(method, values, names, ignoreArray);
         if (rules.isEmpty()) {
             return;
         }
