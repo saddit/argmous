@@ -58,7 +58,7 @@ public class TopologyMixingHandler implements RuleMixHandler, StandardInitBean {
             OverrideTo annotation = startClass.getAnnotation(OverrideTo.class);
             if (annotation != null) {
                 for (Class<? extends ValidationRuleFactory> endClass : keySet) {
-                    if (endClass.equals(annotation.value())) {
+                    if (annotation.value().isAssignableFrom(endClass)) {
                         graph.add(startClass, endClass);
                     }
                 }

@@ -44,12 +44,12 @@ public class CompositeRuleFactory implements ValidationRuleFactory, StandardInit
             }
             if (factories == null) {
                 factories = Arrays.asList(new BeanValidationRuleFactory(), new MethodValidationRuleFactory());
-                factories.forEach(i -> {
-                    if (i instanceof StandardInitBean) {
-                        ((StandardInitBean) i).afterInitialize();
-                    }
-                });
             }
+            factories.forEach(i -> {
+                if (i instanceof StandardInitBean) {
+                    ((StandardInitBean) i).afterInitialize();
+                }
+            });
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);
         }
