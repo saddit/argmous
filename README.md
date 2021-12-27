@@ -18,7 +18,6 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 1. add dependence to your `POM.XML` 
 
 ```xml
-
 <repositories>
    <repository>
       <id>jitpack.io</id>
@@ -26,14 +25,14 @@ Argmous is a light and easy framework to validate arguments on any method becaus
    </repository>
 </repositories>
 <dependencies>
-<dependency>
-   <groupId>top.pressed</groupId>
-   <artifactId>argmous-spring-boot-starter</artifactId>
-   <version>{See release for newest}</version>
-</dependency>
+    <dependency>
+       <groupId>top.pressed</groupId>
+       <artifactId>argmous-spring-boot-starter</artifactId>
+       <version>{See release for newest}</version>
+    </dependency>
 </dependencies>
 ```
-   
+
 2. write a controller and handler  `ParamCheckException`
 
    in this case, we limit length of **s** greater or equal than **1** and less than **3** and limit value of **i** greater or equal than **0** and less than **5** （you can customize the rules of validation)
@@ -147,7 +146,6 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 | ArrayParamCheck | target, values, self, id                                               | If you want to check every elements in an(a) array(list), use this to make `ParamCheck` effect all elements |
 | NotValid        |                                                              | use to avoid analyzing and checking for argument             |
 | Valid           | value                                                        | for non spring environments. in order to mark argument's name |
-Cancel changes
 > :information_source: not recommend use `ArrayParamCheck` to a large array
 >
 > :warning: If method have more than one argument you must use `target` on `@ParamCheck` unless you just want to validate first argument 
