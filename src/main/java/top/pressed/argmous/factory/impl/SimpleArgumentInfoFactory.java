@@ -1,7 +1,7 @@
 package top.pressed.argmous.factory.impl;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.annotation.NotValid;
 import top.pressed.argmous.exception.ArgumentCreateException;
 import top.pressed.argmous.factory.ArgumentInfoFactory;
@@ -14,7 +14,7 @@ import java.lang.reflect.Parameter;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class SimpleArgumentInfoFactory implements ArgumentInfoFactory, StandardInitBean {
+public class SimpleArgumentInfoFactory implements ArgumentInfoFactory, StandardInstanceBean {
 
     public ArgumentInfo createSingle(Object arg, Parameter parameter, String name) {
         ArgumentInfo info = new ArgumentInfo();

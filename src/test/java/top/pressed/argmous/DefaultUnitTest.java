@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import top.pressed.argmous.exception.ParamCheckException;
 import top.pressed.argmous.factory.ArgmousProxyFactory;
-import top.pressed.argmous.manager.pool.InstancePoolManager;
+import top.pressed.argmous.manager.InstanceManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,7 +16,7 @@ public class DefaultUnitTest {
     @Before
     public void setUp() throws Exception {
         ArgmousInitializr.defaultInit();
-        ArgmousProxyFactory jdkProxyFactory = InstancePoolManager.instance().getInstance(ArgmousProxyFactory.class);
+        ArgmousProxyFactory jdkProxyFactory = InstanceManager.instance().getInstance(ArgmousProxyFactory.class);
         //targetService = (TargetService) jdkProxyFactory.proxy(new TargetServiceImpl());
         targetService = (TargetService) jdkProxyFactory.newProxyInstance(TargetServiceImpl.class);
     }

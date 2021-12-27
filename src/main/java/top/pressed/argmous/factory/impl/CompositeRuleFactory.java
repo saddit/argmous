@@ -2,12 +2,13 @@ package top.pressed.argmous.factory.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
+import top.pressed.argmous.annotation.factory.InstancePriority;
 import top.pressed.argmous.exception.RuleCreateException;
 import top.pressed.argmous.exception.StandardInitException;
 import top.pressed.argmous.factory.ValidationRuleFactory;
 import top.pressed.argmous.handler.RuleMixHandler;
-import top.pressed.argmous.manager.pool.InstancePoolManager;
+import top.pressed.argmous.manager.InstanceManager;
 import top.pressed.argmous.model.ValidationRule;
 
 import java.lang.reflect.Method;
@@ -19,10 +20,15 @@ import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompositeRuleFactory implements ValidationRuleFactory, StandardInitBean {
+@InstancePriority(Integer.MAX_VALUE)
+public class CompositeRuleFactory implements ValidationRuleFactory, StandardInstanceBean {
 
     private Collection<ValidationRuleFactory> factories;
     private RuleMixHandler ruleMixHandler;
+
+    public CompositeRuleFactory(Collection<ValidationRuleFactory> factories) {
+        this.factories = factories;
+    }
 
     @Override
     public Collection<ValidationRule> create(Method method, Object[] values, String[] argNames, boolean ignoreArray) throws RuleCreateException {
@@ -39,17 +45,16 @@ public class CompositeRuleFactory implements ValidationRuleFactory, StandardInit
     @Override
     public void afterInitialize() throws StandardInitException {
         try {
+            InstanceManager pool = InstanceManager.instance();
             if (ruleMixHandler == null) {
-                ruleMixHandler = InstancePoolManager.instance().getInstance(RuleMixHandler.class);
+                ruleMixHandler = pool.getInstance(RuleMixHandler.class);
             }
             if (factories == null) {
-                factories = Arrays.asList(new BeanValidationRuleFactory(), new MethodValidationRuleFactory());
+                factories = Arrays.asList(
+                        pool.getInstance(BeanValidationRuleFactory.class),
+                        pool.getInstance(MethodValidationRuleFactory.class)
+                );
             }
-            factories.forEach(i -> {
-                if (i instanceof StandardInitBean) {
-                    ((StandardInitBean) i).afterInitialize();
-                }
-            });
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);
         }

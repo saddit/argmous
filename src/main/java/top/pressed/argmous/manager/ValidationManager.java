@@ -1,4 +1,4 @@
-package top.pressed.argmous.manager.validation;
+package top.pressed.argmous.manager;
 
 import top.pressed.argmous.exception.ParamCheckException;
 import top.pressed.argmous.model.ArgumentInfo;

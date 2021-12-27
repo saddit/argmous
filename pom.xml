@@ -57,9 +57,13 @@
         </plugins>
     </build>
     <distributionManagement>
+        <!--        <repository>-->
+        <!--            <id>github</id>-->
+        <!--            <url>https://maven.pkg.github.com/838239178/argmous</url>-->
+        <!--        </repository>-->
         <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/838239178/argmous</url>
+            <id>local</id>
+            <url>file:E:\software\dev_core\mavenRepo\m2repository</url>
         </repository>
     </distributionManagement>
 

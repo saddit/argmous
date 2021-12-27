@@ -1,7 +1,7 @@
 package top.pressed.argmous.factory.impl;
 
 import lombok.AllArgsConstructor;
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.factory.ArgmousProxyFactory;
 import top.pressed.argmous.handler.impl.ParamCheckProxyHandler;
 
@@ -11,7 +11,7 @@ import java.lang.reflect.Proxy;
 import java.rmi.NoSuchObjectException;
 
 @AllArgsConstructor
-public class JDKProxyFactory implements ArgmousProxyFactory, StandardInitBean {
+public class JDKProxyFactory implements ArgmousProxyFactory, StandardInstanceBean {
 
     @Override
     public Object proxy(Object target) {

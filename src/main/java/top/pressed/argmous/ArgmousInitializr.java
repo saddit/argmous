@@ -2,15 +2,13 @@ package top.pressed.argmous;
 
 import lombok.experimental.UtilityClass;
 import top.pressed.argmous.factory.ArgmousProxyFactory;
-import top.pressed.argmous.factory.impl.CompositeRuleFactory;
-import top.pressed.argmous.factory.impl.JDKProxyFactory;
-import top.pressed.argmous.factory.impl.SimpleArgumentInfoFactory;
+import top.pressed.argmous.factory.impl.*;
 import top.pressed.argmous.handler.RuleAnnotationProcessor;
 import top.pressed.argmous.handler.impl.TopologyMixingHandler;
-import top.pressed.argmous.manager.pool.InstancePoolManager;
-import top.pressed.argmous.manager.validation.impl.DefaultValidationManager;
-import top.pressed.argmous.manager.validator.ValidatorInject;
-import top.pressed.argmous.manager.validator.impl.DefaultValidatorManager;
+import top.pressed.argmous.manager.InstanceManager;
+import top.pressed.argmous.manager.ValidatorInject;
+import top.pressed.argmous.manager.impl.DefaultValidationManager;
+import top.pressed.argmous.manager.impl.DefaultValidatorManager;
 import top.pressed.argmous.service.impl.ArgmousServiceImpl;
 import top.pressed.argmous.validator.RuleValidator;
 
@@ -23,25 +21,15 @@ public class ArgmousInitializr {
     private boolean isInit = false;
 
     public void addValidators(RuleValidator... validators) {
-        if (!isInit) {
-            defaultInit();
-        }
-        try {
-            ValidatorInject vm = InstancePoolManager.instance().getInstance(ValidatorInject.class);
-            if (vm != null) {
-                vm.addValidators(Arrays.asList(validators));
-            }
-        } catch (NoSuchObjectException e) {
-            e.printStackTrace();
-        }
+        addValidators(Arrays.asList(validators));
     }
 
     public void addValidators(Collection<RuleValidator> validators) {
         if (!isInit) {
-            defaultInit();
+            throw new IllegalStateException("Argmous should initialize before adding validators");
         }
         try {
-            ValidatorInject vm = InstancePoolManager.instance().getInstance(ValidatorInject.class);
+            ValidatorInject vm = InstanceManager.instance().getInstance(ValidatorInject.class);
             if (vm != null) {
                 vm.addValidators(validators);
             }
@@ -51,28 +39,34 @@ public class ArgmousInitializr {
     }
 
     public void initBean(Object bean) {
-        InstancePoolManager.instance().setInstance(bean);
-        isInit = true;
+        if (isInit) {
+            throw new IllegalStateException("Argmous initialization has been completed");
+        }
+        InstanceManager.instance().setInstance(bean);
     }
 
     public void finishInit() {
-        ((StandardInitBean) InstancePoolManager.instance()).afterInitialize();
+        ((StandardInstanceBean) InstanceManager.instance()).afterInitialize();
+        isInit = true;
+    }
+
+    public void injectDefaultInstance() {
+        InstanceManager pm = InstanceManager.instance();
+        pm.setInstance(new RuleAnnotationProcessor());
+        pm.setInstance(new CompositeRuleFactory());
+        pm.setInstance(new MethodValidationRuleFactory());
+        pm.setInstance(new BeanValidationRuleFactory());
+        pm.setInstance(new SimpleArgumentInfoFactory());
+        pm.setInstance(new DefaultValidatorManager());
+        pm.setInstance(new DefaultValidationManager());
+        pm.setInstance(new ArgmousServiceImpl());
+        pm.setInstance(new TopologyMixingHandler());
+        pm.setInstance(new JDKProxyFactory());
     }
 
     public void defaultInit() {
-        InstancePoolManager pm = InstancePoolManager.instance();
-        pm.setInstance(new RuleAnnotationProcessor());
-        pm.setInstance(new CompositeRuleFactory());
-        pm.setInstance(new SimpleArgumentInfoFactory());
-        pm.setInstance(new DefaultValidatorManager());
-        //required validator
-        pm.setInstance(new DefaultValidationManager());
-        //required validation and validator
-        pm.setInstance(new ArgmousServiceImpl());
-        //required by proxyHandler
-        pm.setInstance(new TopologyMixingHandler());
-        pm.setInstance(new JDKProxyFactory());
-        isInit = true;
+        if (isInit) return;
+        injectDefaultInstance();
         finishInit();
     }
 
@@ -81,7 +75,7 @@ public class ArgmousInitializr {
             defaultInit();
         }
         try {
-            return InstancePoolManager.instance().getInstance(ArgmousProxyFactory.class);
+            return InstanceManager.instance().getInstance(ArgmousProxyFactory.class);
         } catch (NoSuchObjectException e) {
             throw new IllegalStateException(e);
         }

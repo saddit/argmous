@@ -1,17 +1,17 @@
-package top.pressed.argmous.manager.validation.impl;
+package top.pressed.argmous.manager.impl;
 
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.exception.ParamCheckException;
 import top.pressed.argmous.exception.StandardInitException;
-import top.pressed.argmous.manager.pool.InstancePoolManager;
-import top.pressed.argmous.manager.validator.ValidatorManager;
+import top.pressed.argmous.manager.InstanceManager;
+import top.pressed.argmous.manager.ValidatorManager;
 import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.model.ValidationRule;
 
 import java.rmi.NoSuchObjectException;
 import java.util.Collection;
 
-public class DefaultValidationManager extends AbstractValidationManager implements StandardInitBean {
+public class DefaultValidationManager extends AbstractValidationManager implements StandardInstanceBean {
 
     protected ValidatorManager validatorManager;
 
@@ -36,7 +36,7 @@ public class DefaultValidationManager extends AbstractValidationManager implemen
     public void afterInitialize() throws StandardInitException {
         try {
             if (validatorManager == null) {
-                this.validatorManager = InstancePoolManager.instance().getInstance(ValidatorManager.class);
+                this.validatorManager = InstanceManager.instance().getInstance(ValidatorManager.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

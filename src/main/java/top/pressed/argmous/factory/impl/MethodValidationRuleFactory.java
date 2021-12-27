@@ -1,6 +1,6 @@
 package top.pressed.argmous.factory.impl;
 
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.annotation.ArrayParamCheck;
 import top.pressed.argmous.annotation.ParamCheck;
 import top.pressed.argmous.annotation.ParamChecks;
@@ -9,7 +9,7 @@ import top.pressed.argmous.exception.RuleCreateException;
 import top.pressed.argmous.exception.StandardInitException;
 import top.pressed.argmous.factory.ValidationRuleFactory;
 import top.pressed.argmous.handler.RuleAnnotationProcessor;
-import top.pressed.argmous.manager.pool.InstancePoolManager;
+import top.pressed.argmous.manager.InstanceManager;
 import top.pressed.argmous.model.ValidationRule;
 
 import java.lang.annotation.Annotation;
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @OverrideTo(BeanValidationRuleFactory.class)
-public class MethodValidationRuleFactory implements ValidationRuleFactory, StandardInitBean {
+public class MethodValidationRuleFactory implements ValidationRuleFactory, StandardInstanceBean {
 
     public static String ARRAY_SELF_RULE = "ARGMOUS.isSelfRule";
 
@@ -53,7 +53,7 @@ public class MethodValidationRuleFactory implements ValidationRuleFactory, Stand
     public void afterInitialize() throws StandardInitException {
         try {
             if (annotationProcessor == null) {
-                annotationProcessor = InstancePoolManager.instance().getInstance(RuleAnnotationProcessor.class);
+                annotationProcessor = InstanceManager.instance().getInstance(RuleAnnotationProcessor.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

@@ -1,7 +1,7 @@
-package top.pressed.argmous.manager.validation.impl;
+package top.pressed.argmous.manager.impl;
 
 import top.pressed.argmous.exception.ParamCheckException;
-import top.pressed.argmous.manager.validation.ValidationManager;
+import top.pressed.argmous.manager.ValidationManager;
 import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.model.ValidationRule;
 

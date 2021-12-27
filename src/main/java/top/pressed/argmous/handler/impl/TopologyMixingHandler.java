@@ -1,7 +1,7 @@
 package top.pressed.argmous.handler.impl;
 
 import org.apache.commons.lang3.SerializationUtils;
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.annotation.factory.OverrideTo;
 import top.pressed.argmous.factory.ValidationRuleFactory;
 import top.pressed.argmous.handler.RuleMixHandler;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TopologyMixingHandler implements RuleMixHandler, StandardInitBean {
+public class TopologyMixingHandler implements RuleMixHandler, StandardInstanceBean {
 
     public Collection<ValidationRule> mix(Collection<ValidationRule> overridden, Collection<ValidationRule> override) {
         ArrayList<ValidationRule> mixedRules = SerializationUtils.clone(new ArrayList<>(overridden));

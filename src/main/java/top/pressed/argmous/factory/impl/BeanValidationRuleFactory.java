@@ -1,11 +1,11 @@
 package top.pressed.argmous.factory.impl;
 
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.exception.RuleCreateException;
 import top.pressed.argmous.exception.StandardInitException;
 import top.pressed.argmous.factory.ValidationRuleFactory;
 import top.pressed.argmous.handler.RuleAnnotationProcessor;
-import top.pressed.argmous.manager.pool.InstancePoolManager;
+import top.pressed.argmous.manager.InstanceManager;
 import top.pressed.argmous.model.ValidationRule;
 import top.pressed.argmous.util.BeanUtils;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-public class BeanValidationRuleFactory implements ValidationRuleFactory, StandardInitBean {
+public class BeanValidationRuleFactory implements ValidationRuleFactory, StandardInstanceBean {
 
     private RuleAnnotationProcessor annotationProcessor;
 
@@ -96,7 +96,7 @@ public class BeanValidationRuleFactory implements ValidationRuleFactory, Standar
     public void afterInitialize() throws StandardInitException {
         try {
             if (annotationProcessor == null) {
-                annotationProcessor = InstancePoolManager.instance().getInstance(RuleAnnotationProcessor.class);
+                annotationProcessor = InstanceManager.instance().getInstance(RuleAnnotationProcessor.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

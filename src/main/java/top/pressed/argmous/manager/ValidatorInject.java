@@ -1,4 +1,4 @@
-package top.pressed.argmous.manager.validator;
+package top.pressed.argmous.manager;
 
 import top.pressed.argmous.validator.RuleValidator;
 

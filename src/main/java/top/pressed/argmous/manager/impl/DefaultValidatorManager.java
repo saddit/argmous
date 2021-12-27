@@ -1,10 +1,10 @@
-package top.pressed.argmous.manager.validator.impl;
+package top.pressed.argmous.manager.impl;
 
 import lombok.AllArgsConstructor;
-import top.pressed.argmous.StandardInitBean;
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.exception.StandardInitException;
-import top.pressed.argmous.manager.validator.ValidatorInject;
-import top.pressed.argmous.manager.validator.ValidatorManager;
+import top.pressed.argmous.manager.ValidatorInject;
+import top.pressed.argmous.manager.ValidatorManager;
 import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.model.ValidationRule;
 import top.pressed.argmous.validator.RuleValidator;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @AllArgsConstructor
-public class DefaultValidatorManager implements ValidatorManager, StandardInitBean, ValidatorInject {
+public class DefaultValidatorManager implements ValidatorManager, StandardInstanceBean, ValidatorInject {
 
     protected final Collection<RuleValidator> validators;
 
