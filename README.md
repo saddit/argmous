@@ -17,21 +17,22 @@ Argmous is a light and easy framework to validate arguments on any method becaus
 
 1. add dependence to your `POM.XML` 
 
-   ```xml
-   <repositories>
-       <repository>
-           <id>jitpack.io</id>
-           <url>https://jitpack.io</url>
-       </repository>
-   </repositories>
-   <dependencies>
-       <dependency>
-           <groupId>top.pressed</groupId>
-           <artifactId>argmous-spring-boot-starter</artifactId>
-           <version>{See release for newest}</version></version>
-       </dependency>
-   </dependencies>
-   ```
+```xml
+
+<repositories>
+   <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+   </repository>
+</repositories>
+<dependencies>
+<dependency>
+   <groupId>top.pressed</groupId>
+   <artifactId>argmous-spring-boot-starter</artifactId>
+   <version>{See release for newest}</version>
+</dependency>
+</dependencies>
+```
    
 2. write a controller and handler  `ParamCheckException`
 
