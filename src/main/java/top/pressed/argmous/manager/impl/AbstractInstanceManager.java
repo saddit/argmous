@@ -33,14 +33,14 @@ public abstract class AbstractInstanceManager implements InstanceManager, Standa
         return annotation == null ? -1 : annotation.value();
     }
 
-    protected boolean allowSet(Class<?> type) {
+    protected boolean allowSet(Class<?> type, Object instance) {
         if (StandardInstanceBean.class.equals(type)) {
             return false;
         }
         Object o = getFromPool(type);
         if (o != null) {
             int oldI = getPriority(o.getClass());
-            int newI = getPriority(type);
+            int newI = getPriority(instance.getClass());
             return oldI < newI;
         }
         return true;
@@ -62,7 +62,7 @@ public abstract class AbstractInstanceManager implements InstanceManager, Standa
         addToPool(instance, insClass);
         while (insClass != null) {
             for (Class<?> i : insClass.getInterfaces()) {
-                if (allowSet(i)) {
+                if (allowSet(i, instance)) {
                     addToPool(instance, i);
                 }
             }
