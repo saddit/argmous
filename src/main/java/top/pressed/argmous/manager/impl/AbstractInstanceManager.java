@@ -8,7 +8,7 @@ import top.pressed.argmous.manager.InstanceManager;
 import java.rmi.NoSuchObjectException;
 
 
-public abstract class AbstractInstanceManager implements InstanceManager, StandardInstanceBean {
+public abstract class AbstractInstanceManager implements InstanceManager {
 
     protected abstract void addToPool(Object o, Class<?> type);
 

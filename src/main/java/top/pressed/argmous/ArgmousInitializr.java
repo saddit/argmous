@@ -46,7 +46,7 @@ public class ArgmousInitializr {
     }
 
     public void finishInit() {
-        ((StandardInstanceBean) InstanceManager.instance()).afterInitialize();
+        InstanceManager.instance().afterInitialize();
         isInit = true;
     }
 

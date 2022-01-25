@@ -1,11 +1,12 @@
 package top.pressed.argmous.manager;
 
+import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.exception.InstanceException;
 import top.pressed.argmous.manager.impl.ConcurrentInstanceManager;
 
 import java.rmi.NoSuchObjectException;
 
-public interface InstanceManager {
+public interface InstanceManager extends StandardInstanceBean {
     <T> T getInstance(Class<T> type) throws NoSuchObjectException;
 
     void setInstance(Object instance) throws InstanceException;
