@@ -70,6 +70,10 @@ public class ArgmousInitializr {
         finishInit();
     }
 
+    public boolean hasInit() {
+        return isInit;
+    }
+
     public ArgmousProxyFactory getProxyFactory() {
         if (!isInit) {
             defaultInit();
