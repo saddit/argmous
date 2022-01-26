@@ -7,7 +7,7 @@ import top.pressed.argmous.exception.ParamCheckException;
 import top.pressed.argmous.exception.StandardInitException;
 import top.pressed.argmous.factory.ArgumentInfoFactory;
 import top.pressed.argmous.factory.ValidationRuleFactory;
-import top.pressed.argmous.manager.InstanceManager;
+import top.pressed.argmous.manager.GetInstance;
 import top.pressed.argmous.manager.ValidationManager;
 import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.model.ValidationRule;
@@ -43,16 +43,16 @@ public class ArgmousServiceImpl implements ArgmousService, StandardInstanceBean 
     }
 
     @Override
-    public void afterInitialize() throws StandardInitException {
+    public void afterInitialize(GetInstance getter) throws StandardInitException {
         try {
             if (this.validationManager == null) {
-                this.validationManager = InstanceManager.instance().getInstance(ValidationManager.class);
+                this.validationManager = getter.getInstance(ValidationManager.class);
             }
             if (this.argumentFactory == null) {
-                this.argumentFactory = InstanceManager.instance().getInstance(ArgumentInfoFactory.class);
+                this.argumentFactory = getter.getInstance(ArgumentInfoFactory.class);
             }
             if (this.ruleFactory == null) {
-                this.ruleFactory = InstanceManager.instance().getInstance(ValidationRuleFactory.class);
+                this.ruleFactory = getter.getInstance(ValidationRuleFactory.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

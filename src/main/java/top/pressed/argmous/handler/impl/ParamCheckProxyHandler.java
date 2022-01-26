@@ -1,7 +1,6 @@
 package top.pressed.argmous.handler.impl;
 
 import top.pressed.argmous.annotation.Valid;
-import top.pressed.argmous.manager.InstanceManager;
 import top.pressed.argmous.service.ArgmousService;
 
 import java.lang.reflect.InvocationHandler;
@@ -14,9 +13,9 @@ public class ParamCheckProxyHandler implements InvocationHandler {
     private Object target;
     private ArgmousService service;
 
-    public ParamCheckProxyHandler(Object target) throws NoSuchObjectException {
+    public ParamCheckProxyHandler(Object target, ArgmousService service) throws NoSuchObjectException {
         this.target = target;
-        service = InstanceManager.instance().getInstance(ArgmousService.class);
+        this.service = service;
     }
 
     @Override

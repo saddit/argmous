@@ -1,12 +1,12 @@
 package top.pressed.argmous;
 
-import lombok.experimental.UtilityClass;
 import top.pressed.argmous.factory.ArgmousProxyFactory;
 import top.pressed.argmous.factory.impl.*;
 import top.pressed.argmous.handler.RuleAnnotationProcessor;
 import top.pressed.argmous.handler.impl.TopologyMixingHandler;
 import top.pressed.argmous.manager.InstanceManager;
 import top.pressed.argmous.manager.ValidatorInject;
+import top.pressed.argmous.manager.impl.ConcurrentInstanceManager;
 import top.pressed.argmous.manager.impl.DefaultValidationManager;
 import top.pressed.argmous.manager.impl.DefaultValidatorManager;
 import top.pressed.argmous.service.impl.ArgmousServiceImpl;
@@ -16,9 +16,28 @@ import java.rmi.NoSuchObjectException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@UtilityClass
 public class ArgmousInitializr {
     private boolean isInit = false;
+    private final InstanceManager instanceManager;
+
+    @Deprecated
+    private static ArgmousInitializr _instance;
+
+    @Deprecated
+    public static ArgmousInitializr getInstance() {
+        if (_instance == null) {
+            _instance = new ArgmousInitializr();
+        }
+        return _instance;
+    }
+
+    public ArgmousInitializr(InstanceManager instanceManager) {
+        this.instanceManager = instanceManager;
+    }
+
+    public ArgmousInitializr() {
+        this(new ConcurrentInstanceManager());
+    }
 
     public void addValidators(RuleValidator... validators) {
         addValidators(Arrays.asList(validators));
@@ -29,7 +48,7 @@ public class ArgmousInitializr {
             throw new IllegalStateException("Argmous should initialize before adding validators");
         }
         try {
-            ValidatorInject vm = InstanceManager.instance().getInstance(ValidatorInject.class);
+            ValidatorInject vm = getInstanceManager().getInstance(ValidatorInject.class);
             if (vm != null) {
                 vm.addValidators(validators);
             }
@@ -42,16 +61,16 @@ public class ArgmousInitializr {
         if (isInit) {
             throw new IllegalStateException("Argmous initialization has been completed");
         }
-        InstanceManager.instance().setInstance(bean);
+        getInstanceManager().setInstance(bean);
     }
 
     public void finishInit() {
-        InstanceManager.instance().afterInitialize();
+        getInstanceManager().afterInitialize();
         isInit = true;
     }
 
     public void injectDefaultInstance() {
-        InstanceManager pm = InstanceManager.instance();
+        InstanceManager pm = getInstanceManager();
         pm.setInstance(new RuleAnnotationProcessor());
         pm.setInstance(new CompositeRuleFactory());
         pm.setInstance(new MethodValidationRuleFactory());
@@ -79,9 +98,13 @@ public class ArgmousInitializr {
             defaultInit();
         }
         try {
-            return InstanceManager.instance().getInstance(ArgmousProxyFactory.class);
+            return getInstanceManager().getInstance(ArgmousProxyFactory.class);
         } catch (NoSuchObjectException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public InstanceManager getInstanceManager() {
+        return instanceManager;
     }
 }

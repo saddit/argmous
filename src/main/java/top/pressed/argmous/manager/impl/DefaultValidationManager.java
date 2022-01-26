@@ -3,7 +3,7 @@ package top.pressed.argmous.manager.impl;
 import top.pressed.argmous.StandardInstanceBean;
 import top.pressed.argmous.exception.ParamCheckException;
 import top.pressed.argmous.exception.StandardInitException;
-import top.pressed.argmous.manager.InstanceManager;
+import top.pressed.argmous.manager.GetInstance;
 import top.pressed.argmous.manager.ValidatorManager;
 import top.pressed.argmous.model.ArgumentInfo;
 import top.pressed.argmous.model.ValidationRule;
@@ -33,10 +33,10 @@ public class DefaultValidationManager extends AbstractValidationManager implemen
     }
 
     @Override
-    public void afterInitialize() throws StandardInitException {
+    public void afterInitialize(GetInstance getter) throws StandardInitException {
         try {
             if (validatorManager == null) {
-                this.validatorManager = InstanceManager.instance().getInstance(ValidatorManager.class);
+                this.validatorManager = getter.getInstance(ValidatorManager.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

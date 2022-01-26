@@ -14,6 +14,7 @@ public class ConcurrentInstanceManager extends AbstractInstanceManager {
         pool.values().forEach(i -> {
             if (i instanceof StandardInstanceBean) {
                 ((StandardInstanceBean) i).afterInitialize();
+                ((StandardInstanceBean) i).afterInitialize(this);
             }
         });
     }

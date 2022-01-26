@@ -9,7 +9,7 @@ import top.pressed.argmous.exception.RuleCreateException;
 import top.pressed.argmous.exception.StandardInitException;
 import top.pressed.argmous.factory.ValidationRuleFactory;
 import top.pressed.argmous.handler.RuleAnnotationProcessor;
-import top.pressed.argmous.manager.InstanceManager;
+import top.pressed.argmous.manager.GetInstance;
 import top.pressed.argmous.model.ValidationRule;
 
 import java.lang.annotation.Annotation;
@@ -50,10 +50,10 @@ public class MethodValidationRuleFactory implements ValidationRuleFactory, Stand
     }
 
     @Override
-    public void afterInitialize() throws StandardInitException {
+    public void afterInitialize(GetInstance getter) throws StandardInitException {
         try {
             if (annotationProcessor == null) {
-                annotationProcessor = InstanceManager.instance().getInstance(RuleAnnotationProcessor.class);
+                annotationProcessor = getter.getInstance(RuleAnnotationProcessor.class);
             }
         } catch (NoSuchObjectException e) {
             throw new StandardInitException(e);

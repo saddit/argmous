@@ -8,7 +8,7 @@ import top.pressed.argmous.exception.RuleCreateException;
 import top.pressed.argmous.exception.StandardInitException;
 import top.pressed.argmous.factory.ValidationRuleFactory;
 import top.pressed.argmous.handler.RuleMixHandler;
-import top.pressed.argmous.manager.InstanceManager;
+import top.pressed.argmous.manager.GetInstance;
 import top.pressed.argmous.model.ValidationRule;
 
 import java.lang.reflect.Method;
@@ -43,16 +43,15 @@ public class CompositeRuleFactory implements ValidationRuleFactory, StandardInst
     }
 
     @Override
-    public void afterInitialize() throws StandardInitException {
+    public void afterInitialize(GetInstance getter) throws StandardInitException {
         try {
-            InstanceManager pool = InstanceManager.instance();
             if (ruleMixHandler == null) {
-                ruleMixHandler = pool.getInstance(RuleMixHandler.class);
+                ruleMixHandler = getter.getInstance(RuleMixHandler.class);
             }
             if (factories == null) {
                 factories = Arrays.asList(
-                        pool.getInstance(BeanValidationRuleFactory.class),
-                        pool.getInstance(MethodValidationRuleFactory.class)
+                        getter.getInstance(BeanValidationRuleFactory.class),
+                        getter.getInstance(MethodValidationRuleFactory.class)
                 );
             }
         } catch (NoSuchObjectException e) {
