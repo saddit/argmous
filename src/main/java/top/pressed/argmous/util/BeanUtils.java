@@ -1,11 +1,9 @@
 package top.pressed.argmous.util;
 
-import com.esotericsoftware.reflectasm.FieldAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.ClassUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.util.Arrays;
 import java.util.List;
@@ -17,12 +15,13 @@ public class BeanUtils {
         return !ClassUtils.isPrimitiveOrWrapper(o) &&
                 !String.class.isAssignableFrom(o) &&
                 !Iterable.class.isAssignableFrom(o) &&
-                !Member.class.isAssignableFrom(o);
+                !Member.class.isAssignableFrom(o) &&
+                !o.isAnnotation() &&
+                !o.isEnum();
     }
 
     /**
      * exclude toString, equals, hashCode ....
-     *
      */
     public boolean isBeanBaseMethod(String methodName) {
         return Arrays.asList("toString", "equals", "hashCode").contains(methodName);
@@ -44,7 +43,7 @@ public class BeanUtils {
 
         List<String> excludeList = Arrays.stream(exclude).collect(Collectors.toList());
 
-        for (int i = 0; i< fromMethod.getMethodNames().length; i++) {
+        for (int i = 0; i < fromMethod.getMethodNames().length; i++) {
             String toMethodName = fromMethod.getMethodNames()[i];
 
             if (BeanUtils.isBeanBaseMethod(toMethodName) || !toMethodName.matches("^get\\w+$")) {
@@ -71,7 +70,8 @@ public class BeanUtils {
                         && ClassUtils.primitiveToWrapper(fromFieldType).equals(toFieldType))) {
                     toMethod.invoke(to, toSetterIdx, fromValue);
                 }
-            } catch (IllegalArgumentException ignore) {}
+            } catch (IllegalArgumentException ignore) {
+            }
         }
     }
 }
