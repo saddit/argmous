@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
  */
 public class SpecTopologyGraph<T> {
 
-    private Queue<SpecTopologyNode<T>> nodes;
+    private final Queue<SpecTopologyNode<T>> nodes;
 
     public SpecTopologyGraph() {
         nodes = new PriorityQueue<>(Comparator.comparingInt(SpecTopologyNode::getPreNodeCount));

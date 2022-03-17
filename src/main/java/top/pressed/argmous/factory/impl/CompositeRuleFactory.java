@@ -42,6 +42,10 @@ public class CompositeRuleFactory implements ValidationRuleFactory, StandardInst
         return ruleMixHandler.handle(dataMap);
     }
 
+    public void addFactory(ValidationRuleFactory factory) {
+        factories.add(factory);
+    }
+
     @Override
     public void afterInitialize(GetInstance getter) throws StandardInitException {
         try {

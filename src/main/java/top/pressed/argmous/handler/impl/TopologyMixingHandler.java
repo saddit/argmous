@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class TopologyMixingHandler implements RuleMixHandler, StandardInstanceBean {
 
+    @Deprecated
     public Collection<ValidationRule> mix(Collection<ValidationRule> overridden, Collection<ValidationRule> override) {
         ArrayList<ValidationRule> mixedRules = SerializationUtils.clone(new ArrayList<>(overridden));
         //O(N)

@@ -213,6 +213,16 @@ public interface RuleValidator {
 
 If your project imported `SpringCache` then Argmous would use it to cache validation rules.
 
+### Expand RuleFactory
+
+If you have an idea to create validation rules from other palace and eager to override original rules，you can
+implement `ValidationRuleFactory` to create own factory and add this into `CompositeRuleFactory` whitch gets
+from `ArgmousInitialzer.getInstanceManager().getInstance(CompositeRuleFactory.class)`. You can
+use `addFactory(YourOwenFactory)` to add your own factory。When you want to override rules from bean or
+method，using `@OverrideTo(BeanValidationRuleFactory)` on your factory class.
+
+> As default, method's rules will override rules from bean. If your factory also override bean's rules, It means your factory equals `MethodValidationRuleFactory` and couldn't predict who will covers whom.
+
 ## Designed Architecture
 
 ### Sequence Diagram
