@@ -177,7 +177,10 @@ we provide lots of validators
 
 ### Expand validator
 
-if you have a special rule,  just implement `RuleValidator` and make it as a component of spring and remember use `ParamCheck-custom`.
+##### Expand
+
+if you have a special rule, just implement `RuleValidator` and make it as a component of spring and remember
+use `ParamCheck-custom`.
 
 ```java
 public interface RuleValidator {
